@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  frontend:
+    stdin_open: true
+    build:
+      context: ./services/frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    volumes:
+      - ./services/frontend:/app/frontend
+      - /app/frontend/node_modules
+    ports:
+      - "2000:2000"
+    env_file:
+      - ./services/frontend/.env.dev
+    networks:
+      - default
+
+  evm-contracts:
+    stdin_open: true
+    build:
+      context: ./services/evm-contracts
+      dockerfile: Dockerfile
+    container_name: evm-contracts
+    ports:
+      - "8545:8545"
+    networks:
+      - default
+
+volumes:
+  postgres_data:
+
+networks:
+  default:
