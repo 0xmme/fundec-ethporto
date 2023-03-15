@@ -8,18 +8,17 @@ import "../interfaces/IERC20.sol";
 import "./schemas.sol";
 
 /* Errors */
-error Crowdfund__InvalidDate();
-error Crowdfund__ErrorLaunchingCampaign();
-error Crowdfund__ErrorPledging();
-error Crowdfund__ErrorUnpledging();
-error Crowdfund__ErrorClaiming();
+error Crowdlend__InvalidDate();
+error Crowdlend__ErrorLaunchingCampaign();
+error Crowdlend__ErrorPledging();
+error Crowdlend__ErrorUnpledging();
+error Crowdlend__ErrorClaiming();
 
 
-
-contract Crowdfund is Ownable {
+contract Crowdlend is Ownable {
     /**
      * @dev This contract is designed to handle the logic for managing a 
-     * single crowdfunding campaign.
+     * single crowdlending campaign.
     */
 
     //----------------- STORAGE -----------------
@@ -72,7 +71,7 @@ contract Crowdfund is Ownable {
         if (block.timestamp < campaign.startAt || 
             block.timestamp > campaign.endAt || 
             token.balanceOf(msg.sender) < _amount) {
-            revert Crowdfund__ErrorPledging();
+            revert Crowdlend__ErrorPledging();
         }
         
         token.transferFrom(msg.sender, address(this), _amount);
@@ -87,7 +86,7 @@ contract Crowdfund is Ownable {
         if (block.timestamp >= campaign.startAt || 
             block.timestamp <= campaign.endAt || 
             pledgedAmount[msg.sender] >= _amount) {
-            revert Crowdfund__ErrorUnpledging();
+            revert Crowdlend__ErrorUnpledging();
         }
 
         token.transferFrom(address(this), msg.sender, _amount);

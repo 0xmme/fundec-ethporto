@@ -2,10 +2,10 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { CrowdfundFactory, MockToken } from "../../typechain-types";
+import { CrowdlendFactory, MockToken } from "../../typechain-types";
 
-describe("CrowdfundFactory contract", function () {
-  let crowdfundFactory: CrowdfundFactory;
+describe("CrowdlendFactory contract", function () {
+  let crowdlendFactory: CrowdlendFactory;
   let mockERC20: MockToken;
   let DAO: SignerWithAddress;
   let campaignOwner: SignerWithAddress;
@@ -18,15 +18,15 @@ describe("CrowdfundFactory contract", function () {
     const MockERC20Factory = await ethers.getContractFactory("MockToken");
     mockERC20 = await MockERC20Factory.connect(DAO).deploy("MOCK", "MCK");
 
-    const CrowdfundFactoryFactory = await ethers.getContractFactory(
-      "CrowdfundFactory"
+    const crowdlendFactoryFactory = await ethers.getContractFactory(
+      "CrowdlendFactory"
     );
-    crowdfundFactory = await CrowdfundFactoryFactory.connect(DAO).deploy();
+    crowdlendFactory = await crowdlendFactoryFactory.connect(DAO).deploy();
   });
 
   describe("constructor", function () {
     it("Number of campaings should be 0", async function () {
-      expect((await crowdfundFactory.getAllCampaigns()).length).to.equal(0);
+      expect((await crowdlendFactory.getAllCampaigns()).length).to.equal(0);
     });
   });
 
@@ -35,14 +35,14 @@ describe("CrowdfundFactory contract", function () {
     const endAt = Math.floor(Date.now() / 1000) + 7200;
     it("Campaign owner should be able to create campaign", async function () {
       await expect(
-        crowdfundFactory
+        crowdlendFactory
           .connect(campaignOwner)
           .createCampaign(mockERC20.address, GOAL, endAt)
       ).to.be.not.reverted;
     });
 
     it("Number of campaings should be 1", async function () {
-      const allCampaigns = await crowdfundFactory
+      const allCampaigns = await crowdlendFactory
         .connect(campaignOwner)
         .getAllCampaigns();
 

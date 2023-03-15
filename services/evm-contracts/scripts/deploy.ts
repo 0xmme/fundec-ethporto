@@ -1,10 +1,11 @@
-import { ethers } from "hardhat";
+import { ethers, network } from "hardhat";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { CrowdfundFactory, Crowdfund, MockToken } from "../typechain-types";
+import { CrowdlendFactory, MockToken } from "../typechain-types";
+import { verify } from "../utils/verify";
 
 async function main() {
-  let crowdfundFactory: CrowdfundFactory;
+  let crowdlendFactory: CrowdlendFactory;
   let mockERC20: MockToken;
   let DAO: SignerWithAddress;
   let campaignUser: SignerWithAddress;
@@ -18,14 +19,17 @@ async function main() {
   await mockERC20.deployed();
   await mockERC20.connect(DAO).transfer(campaignUser.address, 1000);
 
-  const CrowdfundFactoryFactory = await ethers.getContractFactory(
-    "CrowdfundFactory"
+  const CrowdlendFactoryFactory = await ethers.getContractFactory(
+    "CrowdlendFactory"
   );
-  crowdfundFactory = await CrowdfundFactoryFactory.connect(DAO).deploy();
-  await crowdfundFactory.deployed();
+  crowdlendFactory = await CrowdlendFactoryFactory.connect(DAO).deploy();
+  await crowdlendFactory.deployed();
 
+  if (network.config.chainId !== 1337) {
+    await verify(crowdlendFactory.address, []);
+  }
   console.log(`MOCK deployed to ${mockERC20.address}`);
-  console.log(`CrowdfundFactory deployed to ${crowdfundFactory.address}`);
+  console.log(`CrowdlendFactory deployed to ${crowdlendFactory.address}`);
 }
 
 main().catch((error) => {

@@ -7,8 +7,8 @@ services:
       dockerfile: Dockerfile
     container_name: frontend
     volumes:
-      - ./services/frontend:/app/frontend
-      - /app/frontend/node_modules
+      - ./services/frontend:/app
+      - /app/node_modules
     ports:
       - "2000:2000"
     env_file:
@@ -37,9 +37,18 @@ services:
     build:
       context: ./services/evm-contracts
       dockerfile: Dockerfile
+    restart: always
     container_name: evm-contracts
+    volumes:
+      - ./services/evm-contracts:/app
+      - /app/node_modules
+      - /app/artifacts
+      - /app/cache
+      - /app/typechain-types
     ports:
       - "8545:8545"
+    env_file:
+      - ./services/evm-contracts/.env.dev
     networks:
       - default
     stdin_open: true

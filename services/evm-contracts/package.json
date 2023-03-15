@@ -1,6 +1,6 @@
 {
   "author": "Tiago Tavares",
-  "name": "rec-crowdfunding",
+  "name": "FundEC",
   "version": "1.0.0",
   "description": "NFT Lottery to show-case my skills on solidity development",
   "scripts": {
@@ -8,12 +8,13 @@
     "clean:local": "npx hardhat clean",
     "test:local": "npx hardhat test --network hardhat",
     "test:goerli": "npx hardhat test --network goerli",
-    "start:local": "npx hardhat node && npx hardhat run scripts/deploy.ts",
-    "deploy:local": "npx hardhat run scripts/deploy.ts"
+    "start:local": "npx hardhat node",
+    "deploy:local": "npx hardhat run scripts/deploy.ts --network local"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-network-helpers": "^1.0.8",
     "@nomicfoundation/hardhat-toolbox": "^2.0.1",
+    "@nomiclabs/hardhat-etherscan": "^3.1.7",
     "@openzeppelin/contracts": "^4.8.1",
     "hardhat": "^2.12.7"
   }
