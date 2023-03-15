@@ -44,7 +44,7 @@ import {
 } from "components/molecules/Navbars/DashboardNavbar/styles";
 
 // Soft UI Dashboard PRO React context
-import { useSoftUIController } from "context";
+import { SoftUIControllerProvider } from "context/SoftUIControllerCtx";
 
 // Moralis
 import ConnectButton from "components/atoms/SoftButton/ConnectButton";

@@ -1,5 +1,5 @@
 import { useContext, useCallback } from "react";
-import { DappkitProviderCtx } from "../context";
+import { DappkitProviderCtx } from "../context/DappkitProviderCtx";
 import useAsync from "./useAsync";
 import { fromWei } from "web3-utils";
 

@@ -25,7 +25,7 @@ import SoftInputIconBoxRoot from "components/atoms/SoftInput/SoftInputIconBoxRoo
 import SoftInputIconRoot from "components/atoms/SoftInput/SoftInputIconRoot";
 
 // Soft UI Dashboard PRO React contexts
-import { useSoftUIController } from "context";
+import { useSoftUIController } from "context/SoftUIControllerCtx";
 
 const SoftInput = forwardRef(({ size, icon, error, success, disabled, ...rest }, ref) => {
   let template;

@@ -1,6 +1,6 @@
 import { ERC20 } from "@taikai/dappkit";
 import { useCallback, useContext, useEffect } from "react";
-import { DappkitProviderCtx } from "../context";
+import { DappkitProviderCtx } from "../context/DappkitProviderCtx";
 import useAsync from "./useAsync";
 import { fromWei } from "web3-utils";
 
@@ -28,9 +28,9 @@ const useERC20TokenAllowance = (
   }, [contractAddress, owner, spender]);
 
   const { loading, error, result, execute } = useAsync(executeFunc, false);
-  const allowed = result
-    ? fromWei(result.toLocaleString("fullwide", { useGrouping: false }))
-    : "";
+
+  // @ts-ignore
+  const allowed = result ? fromWei(result.toLocaleString("fullwide", { useGrouping: false })) : "";
   return { loading, error, allowed };
 };
 

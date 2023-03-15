@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { DappkitProviderCtx } from "../context";
+import { DappkitProviderCtx } from "../context/DappkitProviderCtx";
 import { IDappkitReactProvider } from "../lib/IDappkitReactProvider";
 
 export const useWeb3 = () => {

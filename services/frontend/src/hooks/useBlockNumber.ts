@@ -1,21 +1,21 @@
 import { useContext } from "react";
-import { DappkitProviderCtx } from "../context";
+import { DappkitProviderCtx } from "../context/DappkitProviderCtx";
 import useAsync from "./useAsync";
 
-const useAddress = (): {
+const useBlockNumber = (): {
   loading: boolean;
   error: string | null;
-  address: string | null;
+  blockNumber: number | null;
 } => {
   const dappkitProvider = useContext(DappkitProviderCtx);
 
   const execute = async () => {
-    return dappkitProvider.getAddress();
+    return dappkitProvider.getConnection().eth.getBlockNumber();
   };
 
   const { loading, error, result } = useAsync(execute);
 
-  return { loading, address: result, error };
+  return { loading, blockNumber: result, error };
 };
 
-export default useAddress;
+export default useBlockNumber;

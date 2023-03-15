@@ -30,4 +30,4 @@ docker compose down
 
 ### Useful Links
 > Home Page: http://localhost:2007 <br>
-> Staging Server https://vcegi07.inesctec.pt/web3
+> Staging Server: 

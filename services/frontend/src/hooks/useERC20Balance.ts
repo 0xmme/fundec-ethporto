@@ -1,6 +1,6 @@
 import { ERC20 } from "@taikai/dappkit";
 import { useEffect, useContext, useCallback } from "react";
-import { DappkitProviderCtx } from "../context";
+import { DappkitProviderCtx } from "../context/DappkitProviderCtx";
 import useAsync from "./useAsync";
 
 const useERC20Balance = (
@@ -20,6 +20,7 @@ const useERC20Balance = (
   }, [contractAddress, address]);
 
   const executeFunc = useCallback(async () => {
+    // @ts-ignore
     const erc20 = new ERC20(proxy.getConnection(), contractAddress);
     await erc20.loadContract();
     return erc20.getTokenAmount(address);
@@ -27,6 +28,7 @@ const useERC20Balance = (
 
   const { loading, error, result, execute } = useAsync(executeFunc, false);
 
+  // @ts-ignore
   return { loading, error, balance: result ? result : 0 };
 };
 

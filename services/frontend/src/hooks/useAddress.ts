@@ -1,21 +1,21 @@
 import { useContext } from "react";
-import { DappkitProviderCtx } from "../context";
+import { DappkitProviderCtx } from "../context/DappkitProviderCtx";
 import useAsync from "./useAsync";
 
-const useChainId = (): {
-  chainId: number | null;
+const useAddress = (): {
   loading: boolean;
-  error: string;
+  error: string | null;
+  address: string | null;
 } => {
   const dappkitProvider = useContext(DappkitProviderCtx);
 
   const execute = async () => {
-    return dappkitProvider.getConnection().eth.getChainId();
+    return dappkitProvider.getAddress();
   };
 
   const { loading, error, result } = useAsync(execute);
 
-  return { error, loading, chainId: result };
+  return { loading, address: result, error };
 };
 
-export default useChainId;
+export default useAddress;

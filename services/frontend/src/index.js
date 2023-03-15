@@ -12,7 +12,7 @@ import { Provider } from "react-redux";
 import store from "state/store";
 
 // Soft UI Context Provider
-import { SoftUIControllerProvider } from "context";
+import { SoftUIControllerProvider } from "context/SoftUIControllerCtx";
 
 let user = localStorage.getItem("user");
 user = JSON.parse(user);

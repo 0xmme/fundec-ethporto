@@ -25,7 +25,7 @@ import PropTypes from "prop-types";
 import SoftBox from "components/atoms/SoftBox";
 
 // Soft UI Dashboard PRO React context
-import { useSoftUIController, setLayout } from "context";
+import { useSoftUIController, setLayout } from "context/SoftUIControllerCtx";
 
 function DashboardLayout({ children }) {
   const [controller, dispatch] = useSoftUIController();
