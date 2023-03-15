@@ -23,7 +23,7 @@ import GradeIcon from "@mui/icons-material/Grade";
 // Soft UI Dashboard PRO React components
 import SoftBox from "components/atoms/SoftBox";
 import SoftTypography from "components/atoms/SoftTypography";
-import DashboardLayout from "components/molecules/LayoutContainers/DashboardLayout";
+import DashboardLayout from "components/organisms/LayoutContainers/DashboardLayout";
 import Footer from "components/molecules/Footer";
 
 // Project page components
