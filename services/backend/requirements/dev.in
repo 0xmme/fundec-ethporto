@@ -1,0 +1,13 @@
+pytest==7.2.1
+httpx==0.23.3
+devtools==0.10.0
+
+# code coverage
+pytest-cov==4.0.0
+
+# code quality
+flake8==6.0.0
+black==22.12.0
+isort==5.12.0
+
+-r prod.in
