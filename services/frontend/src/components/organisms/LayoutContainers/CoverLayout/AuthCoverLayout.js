@@ -24,8 +24,8 @@ import SoftBox from "components/atoms/SoftBox";
 import SoftTypography from "components/atoms/SoftTypography";
 
 // Soft UI Dashboard PRO React example components
-import PageLayout from "components/molecules/LayoutContainers/PageLayout";
-import DefaultNavbar from "components/molecules/Navbars/DefaultNavbar";
+import PageLayout from "components/organisms/LayoutContainers/PageLayout";
+import DefaultNavbar from "components/organisms/Navbars/DefaultNavbar";
 
 // Authentication layout components
 import AuthFooter from "components/molecules/Footer/AuthFooter";

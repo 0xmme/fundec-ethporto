@@ -13,11 +13,7 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-// react-router components
-import { useLocation, Link } from "react-router-dom";
 
 // prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
@@ -26,32 +22,19 @@ import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
 import Icon from "@mui/material/Icon";
 
 // Soft UI Dashboard PRO React components
 import SoftBox from "components/atoms/SoftBox";
 import SoftTypography from "components/atoms/SoftTypography";
-import SoftInput from "components/atoms/SoftInput";
-import Breadcrumbs from "components/molecules/Breadcrumbs";
 
 // Custom styles for DashboardNavbar
-import {
-  navbar,
-  navbarRow,
-  navbarIconButton,
-  navbarMobileMenu,
-} from "components/molecules/Navbars/DashboardNavbar/styles";
-
-// Soft UI Dashboard PRO React context
-import { SoftUIControllerProvider } from "context/SoftUIControllerCtx";
+import { navbar, navbarRow } from "components/organisms/Navbars/DashboardNavbar/styles";
 
 // Moralis
 import ConnectButton from "components/atoms/SoftButton/ConnectButton";
 
 function DashboardNavbar({ absolute, light, isMini }) {
-  const user = { name: "Hey", token: "" };
-  const [openMenu, setOpenMenu] = useState(false);
   const navigate = useNavigate();
 
   const onClickLogout = () => {

@@ -12,7 +12,7 @@ import DoughnutChart from "components/molecules/Charts/DoughnutChart";
 import FormField from "components/molecules/InputFields/InputDefault";
 import SoftButton from "components/atoms/SoftButton";
 
-function CommunityCard({
+function CampaignCard({
   title,
   subtitle,
   location,
@@ -176,4 +176,4 @@ function CommunityCard({
   );
 }
 
-export default CommunityCard;
+export default CampaignCard;

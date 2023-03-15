@@ -12,24 +12,55 @@ Coded by www.creative-tim.com
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
-
+// Core
 import { useState, useEffect } from "react";
 
 // @mui material components
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
+import AppBar from "@mui/material/AppBar";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 
 // Soft UI Dashboard PRO React components
 import SoftBox from "components/atoms/SoftBox";
 import SoftTypography from "components/atoms/SoftTypography";
-
-// Soft UI Dashboard PRO React example components
-import DashboardNavbar from "components/molecules/Navbars/DashboardNavbar";
+import SoftButton from "components/atoms/SoftButton";
+import DashboardNavbar from "components/organisms/Navbars/DashboardNavbar";
+import breakpoints from "assets/theme/base/breakpoints";
 
 // Images
 import curved0 from "assets/images/curved0.jpg";
 
+// Icons
+import Cube from "components/atoms/Icons/Cube";
+import Document from "components/atoms/Icons/Document";
+
 function Header({ name }) {
+  const [tabsOrientation, setTabsOrientation] = useState("horizontal");
+  const [tabValue, setTabValue] = useState(0);
+  const handleSetTabValue = (event, newValue) => setTabValue(newValue);
+
+  useEffect(() => {
+    // A function that sets the orientation state of the tabs.
+    function handleTabsOrientation() {
+      return window.innerWidth < breakpoints.values.sm
+        ? setTabsOrientation("vertical")
+        : setTabsOrientation("horizontal");
+    }
+
+    /** 
+     The event listener that's calling the handleTabsOrientation function when resizing the window.
+    */
+    window.addEventListener("resize", handleTabsOrientation);
+
+    // Call the handleTabsOrientation function to set the state with the initial value.
+    handleTabsOrientation();
+
+    // Remove event listener on cleanup
+    return () => window.removeEventListener("resize", handleTabsOrientation);
+  }, [tabsOrientation]);
+
   return (
     <SoftBox position="relative">
       <DashboardNavbar absolute light />
@@ -63,7 +94,7 @@ function Header({ name }) {
         }}
       >
         <Grid container spacing={3} alignItems="center">
-          <Grid item>
+          <Grid item item xs={12} md={6} lg={4}>
             <SoftBox height="100%" mt={0.5} lineHeight={1}>
               <SoftTypography variant="h5" fontWeight="medium">
                 {name}
@@ -71,6 +102,26 @@ function Header({ name }) {
               <SoftTypography variant="button" color="text" fontWeight="medium">
                 Investor
               </SoftTypography>
+            </SoftBox>
+          </Grid>
+          <Grid item xs={12} md={6} lg={4} sx={{ ml: "auto" }}>
+            <AppBar position="static">
+              <Tabs
+                orientation={tabsOrientation}
+                value={tabValue}
+                onChange={handleSetTabValue}
+                sx={{ background: "transparent" }}
+              >
+                <Tab label="Open" icon={<Cube />} />
+                <Tab label="Closed" icon={<Document />} />
+              </Tabs>
+            </AppBar>
+          </Grid>
+          <Grid item xs={12} md={6} lg={2} sx={{ ml: "auto" }}>
+            <SoftBox display="flex" flexDirection="row-reverse">
+              <SoftButton variant="gradient" color="info" marginLeft="auto">
+                + New Campaign
+              </SoftButton>
             </SoftBox>
           </Grid>
         </Grid>

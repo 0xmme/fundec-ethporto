@@ -3,8 +3,8 @@ import { Routes, Route, Outlet } from "react-router-dom";
 /* Auth */
 import Landing from "pages/Landing";
 
-/* Communities */
-import ListCommunities from "pages/Communities/List";
+/* Campaigns */
+import ListCampaigns from "pages/Campaigns/List";
 
 export default function Router() {
   return (
@@ -13,7 +13,7 @@ export default function Router() {
         {/************** Public routes ***************/}
         <Route index element={<Landing />} />
         {/************** Protected Routes ***************/}
-        <Route path="open-communities" element={<ListCommunities />} />
+        <Route path="open-campaigns" element={<ListCampaigns />} />
       </Route>
     </Routes>
   );

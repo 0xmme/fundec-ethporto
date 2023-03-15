@@ -18,9 +18,6 @@ import { useState, useEffect } from "react";
 import console from "console-browserify";
 import { useNavigate } from "react-router-dom";
 
-// react-router-dom components
-import { Link } from "react-router-dom";
-
 // Soft UI Dashboard PRO React components
 import SoftBox from "components/atoms/SoftBox";
 import SoftInput from "components/atoms/SoftInput";
@@ -30,7 +27,7 @@ import SoftButton from "components/atoms/SoftButton";
 const curved9 = require("assets/images/curved9.jpg");
 
 // Authentication layout components
-import AuthCoverLayout from "components/molecules/LayoutContainers/CoverLayout/AuthCoverLayout";
+import AuthCoverLayout from "components/organisms/LayoutContainers/CoverLayout/AuthCoverLayout";
 
 // Redux
 import { useDispatch } from "react-redux";

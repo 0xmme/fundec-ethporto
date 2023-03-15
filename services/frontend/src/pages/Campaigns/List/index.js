@@ -27,15 +27,15 @@ import DashboardLayout from "components/molecules/LayoutContainers/DashboardLayo
 import Footer from "components/molecules/Footer";
 
 // Project page components
-import Header from "components/organisms/Header/ProfileHeader";
-import CommunityCard from "./Card";
+import Header from "components/organisms/Header";
+import CommunityCard from "./CampaignCard";
 
 // Redux
 import { useSelector } from "react-redux";
 import { useGetCommunitiesQuery } from "state/communities/communitiesApiSlice";
 import { selectCurrentUser } from "state/auth/authSlice";
 
-function ListCommunities() {
+function ListCampaigns() {
   const user = useSelector(selectCurrentUser);
 
   // READ communities
@@ -53,7 +53,7 @@ function ListCommunities() {
       <SoftBox pt={1} pb={2}>
         <SoftBox mt={{ xs: 1, lg: 3 }} mb={1}>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6} lg={4}>
+            <Grid item xs={12} md={6} lg={5}>
               <CommunityCard />
             </Grid>
           </Grid>
@@ -93,4 +93,4 @@ function ListCommunities() {
   );
 }
 
-export default ListCommunities;
+export default ListCampaigns;
