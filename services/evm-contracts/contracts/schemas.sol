@@ -3,6 +3,7 @@ pragma solidity ^0.8.9;
 
 struct Campaign {
     address creator;
+    uint32 apy;
     uint goal;
     uint pledged;
     uint startAt;

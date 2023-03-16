@@ -3,6 +3,9 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { time } from "@nomicfoundation/hardhat-network-helpers";
 
+import { BigNumber } from "ethers";
+
+
 import { CrowdlendFactory, Crowdlend, MockToken } from "../../typechain-types";
 import { ICampaign } from "../../scripts/schemas";
 
@@ -19,6 +22,7 @@ describe("Single Crowdlend contract", function () {
   const startAt = Math.floor(Date.now() / 1000);
   // const startAt2 = Math.floor(Date.now() / 1000) + 3600;
   const endAt = Math.floor(Date.now() / 1000) + 3600;
+  const apy = 5;
 
   before(async function () {
     const signers: SignerWithAddress[] = await ethers.getSigners();
@@ -39,7 +43,7 @@ describe("Single Crowdlend contract", function () {
     let campaignAddress: string = "";
     await crowdlendFactory
       .connect(DAO)
-      .createCampaign(campaignOwner.address, mockERC20.address, GOAL, startAt, endAt)
+      .createCampaign(campaignOwner.address, apy, mockERC20.address, GOAL, startAt, endAt)
       .then((tx) => tx.wait())
       .then((receipt) => {
         campaignAddress = receipt.logs[0].address;
@@ -65,12 +69,13 @@ describe("Single Crowdlend contract", function () {
     it("Campaign can't be created when startDate > endDate",  function (){
       expect(  crowdlendFactory
         .connect(DAO)
-        .createCampaign(campaignOwner.address, mockERC20.address, GOAL, endAt, startAt)).to.be.reverted;
+        .createCampaign(campaignOwner.address, apy,mockERC20.address, GOAL, endAt, startAt)).to.be.reverted;
     })
 
     it("Campaign details should be set", async function () {
       const campaign: ICampaign = await crowdlend.campaign();
       expect(campaign.creator).to.equal(campaignOwner.address);
+      expect(campaign.apy).to.equal(apy);
       expect(campaign.goal).to.equal("100000000000000000");
       expect(campaign.startAt).to.equal(startAt);
       expect(campaign.endAt).to.equal(endAt);
@@ -82,7 +87,7 @@ describe("Single Crowdlend contract", function () {
 
     it("Campaigns can only be launched once", async function () {
       await expect(
-        crowdlend.connect(campaignOwner).launch(attacker.address, GOAL, startAt, endAt)
+        crowdlend.connect(campaignOwner).launch(attacker.address, apy, GOAL, startAt, endAt)
       ).to.be.reverted;
     });
   });

@@ -30,6 +30,7 @@ contract Crowdlend is Ownable {
     //----------------- EVENTS ------------------
     event Launch(
         address indexed creator,
+        uint32 apy,
         uint goal,
         uint256 startAt,
         uint256 endAt
@@ -47,7 +48,7 @@ contract Crowdlend is Ownable {
     }
 
 
-    function launch(address _creator, uint _goal, uint256 _startAt, uint256 _endAt) onlyOwner external {
+    function launch(address _creator, uint32 _apy, uint _goal, uint256 _startAt, uint256 _endAt) onlyOwner external {
       
         if(_endAt < _startAt || 
         state != CampaignState.OPEN){
@@ -56,6 +57,7 @@ contract Crowdlend is Ownable {
 
         campaign = Campaign({
             creator: _creator,
+            apy: _apy,
             goal: _goal,
             pledged: 0,
             startAt: _startAt,
@@ -65,9 +67,8 @@ contract Crowdlend is Ownable {
 
         transferOwnership(_creator);
         state = CampaignState.LAUNCHED;
-        emit Launch(msg.sender,_goal,_startAt,_endAt);
+        emit Launch(msg.sender, _apy,_goal,_startAt,_endAt);
     }
-
 
     function pledge(uint _amount) external {
         if (block.timestamp < campaign.startAt || 
