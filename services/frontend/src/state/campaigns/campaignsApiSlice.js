@@ -9,8 +9,9 @@ const initialState = campaignsAdapter.getInitialState({});
 export const campaignsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getCampaigns: builder.query({
-      query: () => ({
+      query: (undefined) => ({
         url: `/campaigns/`,
+        method: "GET",
         validateStatus: (response, result) => {
           console.log(response);
           return response.status === 200 && !result?.isError;
