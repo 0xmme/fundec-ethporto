@@ -11,12 +11,14 @@ contract CrowdlendFactory {
     constructor() {
     }
 
-    function createCampaign(address _owner, address _token, uint _goal, uint32 _endAt) public returns (address campaignAddress) {
+    function createCampaign(address _owner, address _token, uint _goal, uint256 _startAt, uint256 _endAt) public returns (address campaignAddress) {
         Crowdlend newCampaign = new Crowdlend(_token);
-        newCampaign.launch(_owner, _goal, _endAt);
+        newCampaign.launch(_owner, _goal, _startAt, _endAt);
 
         campaignAddress = address(newCampaign);
         allCampaigns.push(campaignAddress);
+
+        //event is thrown
     }
 
     function getAllCampaigns() public view returns (address[] memory) {

@@ -16,6 +16,8 @@ describe("Single Crowdlend contract", function () {
   let attacker: SignerWithAddress;
 
   const GOAL = "100000000000000000";
+  const startAt = Math.floor(Date.now() / 1000);
+  // const startAt2 = Math.floor(Date.now() / 1000) + 3600;
   const endAt = Math.floor(Date.now() / 1000) + 3600;
 
   before(async function () {
@@ -37,7 +39,7 @@ describe("Single Crowdlend contract", function () {
     let campaignAddress: string = "";
     await crowdlendFactory
       .connect(DAO)
-      .createCampaign(campaignOwner.address, mockERC20.address, GOAL, endAt)
+      .createCampaign(campaignOwner.address, mockERC20.address, GOAL, startAt, endAt)
       .then((tx) => tx.wait())
       .then((receipt) => {
         campaignAddress = receipt.logs[0].address;
@@ -45,7 +47,6 @@ describe("Single Crowdlend contract", function () {
       .catch((error) => {
         console.error("Error creating campaign:", error);
       });
-
     const CrowdlendFactory = await ethers.getContractFactory("Crowdlend");
     crowdlend = CrowdlendFactory.attach(campaignAddress);
   });
@@ -60,12 +61,18 @@ describe("Single Crowdlend contract", function () {
     it("Crowdlend state is set to LAUNCHED", async function () {
       expect(await crowdlend.state()).to.equal(1);
     });
+    
+    it("Campaign can't be created when startDate > endDate",  function (){
+      expect(  crowdlendFactory
+        .connect(DAO)
+        .createCampaign(campaignOwner.address, mockERC20.address, GOAL, endAt, startAt)).to.be.reverted;
+    })
 
     it("Campaign details should be set", async function () {
       const campaign: ICampaign = await crowdlend.campaign();
       expect(campaign.creator).to.equal(campaignOwner.address);
       expect(campaign.goal).to.equal("100000000000000000");
-      expect(campaign.startAt).to.be.greaterThan(0);
+      expect(campaign.startAt).to.equal(startAt);
       expect(campaign.endAt).to.equal(endAt);
     });
 
@@ -75,7 +82,7 @@ describe("Single Crowdlend contract", function () {
 
     it("Campaigns can only be launched once", async function () {
       await expect(
-        crowdlend.connect(campaignOwner).launch(attacker.address, GOAL, endAt)
+        crowdlend.connect(campaignOwner).launch(attacker.address, GOAL, startAt, endAt)
       ).to.be.reverted;
     });
   });
@@ -88,6 +95,8 @@ describe("Single Crowdlend contract", function () {
         .connect(campaignUser)
         .increaseAllowance(crowdlend.address, 1000);
     });
+
+
     
     it("User should be able to pledge", async function () {
       await expect(crowdlend.connect(campaignUser).pledge(500)).to.not.be
@@ -105,7 +114,7 @@ describe("Single Crowdlend contract", function () {
 
     it("User should not be able to pledge if it campaign has ended", async function () {
       await time.increase(3600);
-      await expect(crowdlend.connect(campaignUser).pledge(500)).to.be.reverted;
+      expect(crowdlend.connect(campaignUser).pledge(500)).to.be.reverted;
     });
   });
 });

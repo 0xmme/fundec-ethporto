@@ -32,12 +32,13 @@ describe("CrowdlendFactory contract", function () {
 
   describe("Create campaign", function () {
     const GOAL = "100000000000000000";
+    const startAt = Math.floor(Date.now() / 1000);
     const endAt = Math.floor(Date.now() / 1000) + 7200;
     it("Campaign owner should be able to create campaign", async function () {
       await expect(
         crowdlendFactory
           .connect(DAO)
-          .createCampaign(campaignOwner.address, mockERC20.address, GOAL, endAt)
+          .createCampaign(campaignOwner.address, mockERC20.address, GOAL, startAt, endAt)
       ).to.be.not.reverted;
     });
 

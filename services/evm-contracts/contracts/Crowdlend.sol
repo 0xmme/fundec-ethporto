@@ -47,10 +47,12 @@ contract Crowdlend is Ownable {
     }
 
 
-    function launch(address _creator, uint _goal, uint256 _endAt) onlyOwner external {
-        uint256 _startAt = block.timestamp;
-        require(_endAt > _startAt, "End time is less than Start time");
-        require(state == CampaignState.OPEN, "Campaign has already been launched");
+    function launch(address _creator, uint _goal, uint256 _startAt, uint256 _endAt) onlyOwner external {
+      
+        if(_endAt < _startAt || 
+        state != CampaignState.OPEN){
+            revert Crowdlend__InvalidDate();
+        }
 
         campaign = Campaign({
             creator: _creator,
