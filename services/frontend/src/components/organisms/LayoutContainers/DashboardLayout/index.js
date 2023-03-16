@@ -29,7 +29,6 @@ import { useSoftUIController, setLayout } from "context/SoftUIControllerCtx";
 
 function DashboardLayout({ children }) {
   const [controller, dispatch] = useSoftUIController();
-  const { miniSidenav } = controller;
   const { pathname } = useLocation();
 
   useEffect(() => {

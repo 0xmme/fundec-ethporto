@@ -23,15 +23,25 @@ export const campaignsApiSlice = apiSlice.injectEndpoints({
       providesTags: (result, error, arg) => {
         if (result?.ids) {
           return [
-            { type: "Community", id: "LIST" },
-            ...result.ids.map((id) => ({ type: "Community", id })),
+            { type: "Campaign", id: "LIST" },
+            ...result.ids.map((id) => ({ type: "Campaign", id })),
           ];
-        } else return [{ type: "Community", id: "LIST" }];
+        } else return [{ type: "Campaign", id: "LIST" }];
       },
+    }),
+    addNewCampaign: builder.mutation({
+      query: (campaign) => ({
+        url: "/campaigns/",
+        method: "POST",
+        body: {
+          ...campaign,
+        },
+      }),
+      invalidatesTags: [{ type: "Campaign", id: "LIST" }],
     }),
   }),
 });
 
-export const { useGetCampaignsQuery } = campaignsApiSlice;
+export const { useGetCampaignsQuery, useAddNewCampaignMutation } = campaignsApiSlice;
 
 export const { selectAll: selectAllCampaigns } = campaignsAdapter.getSelectors();

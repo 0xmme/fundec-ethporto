@@ -30,7 +30,7 @@ async def create_new_campaign(owner_address: str) -> str:
 
     transaction = crowdfund_factory.functions.createCampaign(mock_erc20_address, 1000, unix_timestamp).build_transaction(
     {
-        "chainId": 1337,
+        "chainId": 31337,
         "gasPrice": web3.eth.gas_price,
         "from": public_key,
         "nonce": nonce,

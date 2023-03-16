@@ -21,7 +21,7 @@ import SoftBox from "components/atoms/SoftBox";
 import SoftTypography from "components/atoms/SoftTypography";
 import SoftEditor from "components/atoms/SoftEditor";
 
-function EditorDefault({ label, subLabel, onChange, ...rest }) {
+function EditorDefault({ label, subLabel, value, onChange, ...rest }) {
   return (
     <SoftBox display="flex" flexDirection="column" justifyContent="flex-end" height="100%">
       <SoftBox mb={1} ml={0.5} mt={2} lineHeight={0} display="inline-block">
@@ -34,7 +34,7 @@ function EditorDefault({ label, subLabel, onChange, ...rest }) {
           {subLabel}
         </SoftTypography>
       </SoftBox>
-      <SoftEditor onChange={onChange} {...rest} />
+      <SoftEditor value={value} onChange={onChange} {...rest} />
     </SoftBox>
   );
 }
@@ -43,7 +43,8 @@ function EditorDefault({ label, subLabel, onChange, ...rest }) {
 EditorDefault.propTypes = {
   label: PropTypes.string.isRequired,
   subLabel: PropTypes.string.isRequired,
-  laonChangebel: PropTypes.func.isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
 export default EditorDefault;

@@ -60,7 +60,7 @@ const style = {
   },
 };
 
-function ModalDefault({ open, children, onClickClose, onClickConfirm, ...rest }) {
+function ModalDefault({ open, children, onConfirm, onClickClose, onClickConfirm, ...rest }) {
   return (
     <Modal
       open={open}
@@ -71,7 +71,11 @@ function ModalDefault({ open, children, onClickClose, onClickConfirm, ...rest })
       <Box sx={style}>
         {children}
         <Grid container direction="row-reverse" item xs={12}>
-          <Button sx={{ ...style.button, ...style.confirm }} onClick={onClickConfirm}>
+          <Button
+            sx={{ ...style.button, ...style.confirm }}
+            onClick={onClickConfirm}
+            disabled={!onConfirm}
+          >
             Confirmar
           </Button>
           <Button sx={{ ...style.button, ...style.cancel }} onClick={onClickClose}>

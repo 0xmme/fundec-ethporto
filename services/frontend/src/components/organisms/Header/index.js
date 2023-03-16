@@ -119,7 +119,7 @@ function Header({ name, onCreate }) {
           </Grid>
           <Grid item xs={12} md={6} lg={2} sx={{ ml: "auto" }}>
             <SoftBox display="flex" flexDirection="row-reverse">
-              <SoftButton variant="gradient" color="info" marginLeft="auto" onClick={onCreate}>
+              <SoftButton variant="gradient" color="info" onClick={onCreate}>
                 + New Campaign
               </SoftButton>
             </SoftBox>

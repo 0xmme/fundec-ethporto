@@ -1,7 +1,8 @@
+// Core
 import React from "react";
-
-// react-router components
 import Router from "Router";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // @mui material components
 import { ThemeProvider } from "@mui/material/styles";
@@ -31,6 +32,18 @@ export default function App() {
         isOpened={connection.isConnectModalOpen}
         moralisAuth={false}
         setIsOpened={() => dispatch(setIsConnectModalOpen())}
+      />
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
       />
     </ThemeProvider>
   );

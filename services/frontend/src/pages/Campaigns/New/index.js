@@ -1,5 +1,6 @@
 // React
 import { useState } from "react";
+import { DateTime } from "luxon";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -7,7 +8,6 @@ import Typography from "@mui/material/Typography";
 
 // Soft UI Dashboard PRO React components
 import SuiBox from "components/atoms/SoftBox";
-import SoftEditor from "components/atoms/SoftEditor";
 import SelectDefault from "components/molecules/InputFields/SelectDefault";
 import InputDefault from "components/molecules/InputFields/InputDefault";
 import DatePickerDefault from "components/molecules/InputFields/DatePickerDefault";
@@ -20,6 +20,8 @@ import { assets } from "constants/assets.js";
 function NewCampaign({
   setName,
   setDescription,
+  description,
+  setAddress,
   setActivationDate,
   setExpirationDate,
   setIsDemo,
@@ -29,14 +31,15 @@ function NewCampaign({
   setApy,
   setOwnerAddress,
 }) {
-  const onNameChange = (name) => setName(name);
-  const onDescriptionChange = (description) => setDescription(description);
+  const onNameChange = (e) => setName(e.target.value);
+  const onDescriptionChange = (e) => setDescription(e);
+  const onAddressChange = (e) => setAddress(e.target.value);
   const onActivationDateChange = (date) => setActivationDate(date[0]);
   const onExpirationDateChange = (date) => setExpirationDate(date[0]);
   const onIsDemoChange = () => setIsDemo(!isDemo);
   const onAssetChange = (e) => setAsset(e.value);
-  const onGoalChange = (e) => setGoal(e.target.value);
-  const onApyChange = (e) => setApy(e.target.value);
+  const onGoalChange = (e) => setGoal(Number(e.target.value));
+  const onApyChange = (e) => setApy(Number(e.target.value));
   const onOwnerAddressChange = (e) => setOwnerAddress(e.target.value);
 
   return (
@@ -52,8 +55,12 @@ function NewCampaign({
           <EditorDefault
             label="Description"
             subLabel="This is how others will learn about the campaign, so make it good!"
+            value={description}
             onChange={onDescriptionChange}
           />
+        </Grid>
+        <Grid item xs={12}>
+          <InputDefault type="text" label="Location" defaultValue={""} onChange={onAddressChange} />
         </Grid>
         <Grid item xs={12}>
           <Grid container spacing={1}>
@@ -61,14 +68,14 @@ function NewCampaign({
               <DatePickerDefault
                 label="Começa em"
                 onChange={onActivationDateChange}
-                defaultValue={new Date()}
+                defaultValue={DateTime.fromJSDate(new Date()).toFormat("yyyy-MM-dd")}
               />
             </Grid>
             <Grid item xs={6}>
               <DatePickerDefault
                 label="Termina em"
                 onChange={onExpirationDateChange}
-                defaultValue={new Date()}
+                defaultValue={DateTime.fromJSDate(new Date()).toFormat("yyyy-MM-dd")}
               />
             </Grid>
           </Grid>
@@ -78,29 +85,44 @@ function NewCampaign({
         </Grid>
 
         {isDemo ? (
-          <Grid item xs={12}>
-            <Grid container spacing={1}>
-              <Grid item xs={4}>
-                <SelectDefault
-                  label="Ativo"
-                  defaultValue={{ value: "", label: "" }}
-                  onChange={onAssetChange}
-                  options={assets}
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <InputDefault
-                  type="number"
-                  label="Objetivo"
-                  defaultValue={0}
-                  onChange={onGoalChange}
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <InputDefault type="number" label="APY" defaultValue={0} onChange={onApyChange} />
+          <>
+            <Grid item xs={12}>
+              <Grid container spacing={1}>
+                <Grid item xs={4}>
+                  <SelectDefault
+                    label="Ativo"
+                    defaultValue={{ value: "", label: "" }}
+                    onChange={onAssetChange}
+                    options={assets}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <InputDefault
+                    type="number"
+                    label="Objetivo"
+                    defaultValue={0}
+                    onChange={onGoalChange}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <InputDefault
+                    type="number"
+                    label="APY (%)"
+                    defaultValue={0}
+                    onChange={onApyChange}
+                  />
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
+            <Grid item xs={12}>
+              <InputDefault
+                type="test"
+                label="Your ETH Address"
+                defaultValue={""}
+                onChange={onOwnerAddressChange}
+              />
+            </Grid>
+          </>
         ) : (
           <Grid item xs={12}>
             <SuiBox mt={2} mb={2} textAlign="center">

@@ -15,6 +15,8 @@ Coded by www.creative-tim.com
 
 // Core
 import { useState } from "react";
+import { DateTime } from "luxon";
+import console from "console-browserify";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -30,10 +32,12 @@ import CommunityCard from "./CampaignCard";
 import NoteItem from "./NoteItem";
 import ModalDefault from "components/molecules/Modals";
 import NewCampaign from "pages/Campaigns/New";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Redux
 import { useSelector } from "react-redux";
-import { useGetCampaignsQuery } from "state/campaigns/campaignsApiSlice";
+import { useGetCampaignsQuery, useAddNewCampaignMutation } from "state/campaigns/campaignsApiSlice";
 import { selectCurrentUser } from "state/auth/authSlice";
 
 function ListCampaigns() {
@@ -48,14 +52,15 @@ function ListCampaigns() {
     const { ids, entities } = communities;
   }
 
-  // Modal
+  // Modals
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
   // CREATE campaigns
   const [name, setName] = useState(null);
-  const [description, setDescription] = useState(null);
+  const [description, setDescription] = useState("<p>Time to be <strong>creative!</strong></p>");
+  const [address, setAddress] = useState(null);
   const [activationDate, setActivationDate] = useState(null);
   const [expirationDate, setExpirationDate] = useState(null);
   const [isDemo, setIsDemo] = useState(true);
@@ -67,23 +72,60 @@ function ListCampaigns() {
   const newCampaignProps = {
     setName,
     setDescription,
+    description,
+    setAddress,
     setActivationDate,
     setExpirationDate,
     isDemo,
     setIsDemo,
     setAsset,
+    setApy,
+    setGoal,
+    setOwnerAddress,
   };
-  // const [addNewCommunity] = useAddNewCommunityMutation();
+  const onSave =
+    [activationDate, expirationDate, asset, apy, goal, ownerAddress].every(Boolean) &&
+    [goal, apy].every(Number) &&
+    goal > 0 &&
+    apy > 0 &&
+    apy < 100 &&
+    isDemo === true &&
+    name.length > 0 &&
+    activationDate < expirationDate &&
+    activationDate > new Date();
+
+  const [addNewCampaign] = useAddNewCampaignMutation();
   const onNewCommunity = async () => {
-    handleClose();
+    handleCloseModal();
+    const id = toast.loading("Please wait...");
     try {
-      await addNewCommunity({
-        admin_id: user.id,
+      const payload = {
         name,
-        type: isDemo ? "DEMO" : "PROD",
-      }).unwrap();
+        description,
+        address,
+        activation_date: DateTime.fromJSDate(activationDate).toFormat("yyyy-MM-dd hh:mm:ss"),
+        expiration_date: DateTime.fromJSDate(expirationDate).toFormat("yyyy-MM-dd hh:mm:ss"),
+        asset,
+        apy,
+        goal,
+        name,
+        owner_address: ownerAddress,
+      };
+      console.log(payload);
+      await addNewCampaign(payload).unwrap();
+      toast.update(id, {
+        render: "All is good",
+        type: toast.TYPE.SUCCESS,
+        isLoading: false,
+        autoClose: 1000,
+      });
     } catch (err) {
-      dispatch(openNotificationPopup({ notification: err, type: "error" }));
+      toast.update(id, {
+        render: "Something went wrong...",
+        type: toast.TYPE.ERROR,
+        autoClose: 1000,
+        isLoading: false,
+      });
     }
   };
 
@@ -106,7 +148,8 @@ function ListCampaigns() {
       </SoftBox>
       <ModalDefault
         open={openModal}
-        onClickConfirm={() => {}}
+        onConfirm={onSave}
+        onClickConfirm={onNewCommunity}
         onClickClose={handleCloseModal}
         children={<NewCampaign {...newCampaignProps} />}
       />
