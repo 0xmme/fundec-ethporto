@@ -10,6 +10,13 @@ const config: HardhatUserConfig = {
       url: "http://127.0.0.1:8545/",
       chainId: 31337,
     },
+    mantle_goerli: {
+      url: "https://rpc.testnet.mantle.xyz/",
+      chainId: 5001,
+      accounts: {
+        mnemonic: "modify volcano local unusual occur female destroy prefer shoe spy cube economy",
+      },
+    },
   },
   paths: {
     artifacts: path.join(__dirname, "artifacts"),

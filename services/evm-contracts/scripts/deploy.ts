@@ -25,7 +25,7 @@ async function main() {
   crowdlendFactory = await CrowdlendFactoryFactory.connect(DAO).deploy();
   await crowdlendFactory.deployed();
 
-  if (network.config.chainId !== 31337) {
+  if (network.config.chainId !== 31337 && network.config.chainId !== 5001) {
     await verify(crowdlendFactory.address, []);
   }
   console.log(`MOCK deployed to ${mockERC20.address}`);
