@@ -15,7 +15,6 @@ Coded by www.creative-tim.com
 
 // React
 import { useState, useEffect } from "react";
-import console from "console-browserify";
 import { useNavigate } from "react-router-dom";
 
 // Soft UI Dashboard PRO React components

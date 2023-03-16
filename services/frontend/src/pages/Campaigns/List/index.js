@@ -13,33 +13,34 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-// React
-import console from "console-browserify";
+// Core
+import { useState } from "react";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
-import GradeIcon from "@mui/icons-material/Grade";
 
 // Soft UI Dashboard PRO React components
 import SoftBox from "components/atoms/SoftBox";
-import SoftTypography from "components/atoms/SoftTypography";
 import DashboardLayout from "components/organisms/LayoutContainers/DashboardLayout";
 import Footer from "components/molecules/Footer";
 
 // Project page components
 import Header from "components/organisms/Header";
 import CommunityCard from "./CampaignCard";
+import NoteItem from "./NoteItem";
+import ModalDefault from "components/molecules/Modals";
+import NewCampaign from "pages/Campaigns/New";
 
 // Redux
 import { useSelector } from "react-redux";
-import { useGetCommunitiesQuery } from "state/communities/communitiesApiSlice";
+import { useGetCampaignsQuery } from "state/campaigns/campaignsApiSlice";
 import { selectCurrentUser } from "state/auth/authSlice";
 
 function ListCampaigns() {
   const user = useSelector(selectCurrentUser);
 
-  // READ communities
-  const { data: communities, isSuccess } = useGetCommunitiesQuery("communitiesList", {
+  // READ campaigns
+  const { data: communities, isSuccess } = useGetCampaignsQuery("campaignsList", {
     refetchOnFocus: true,
   });
 
@@ -47,9 +48,48 @@ function ListCampaigns() {
     const { ids, entities } = communities;
   }
 
+  // Modal
+  const [openModal, setOpenModal] = useState(false);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
+
+  // CREATE campaigns
+  const [name, setName] = useState(null);
+  const [description, setDescription] = useState(null);
+  const [activationDate, setActivationDate] = useState(null);
+  const [expirationDate, setExpirationDate] = useState(null);
+  const [isDemo, setIsDemo] = useState(true);
+  const [asset, setAsset] = useState(null);
+  const [apy, setApy] = useState(null);
+  const [goal, setGoal] = useState(null);
+  const [ownerAddress, setOwnerAddress] = useState(null);
+
+  const newCampaignProps = {
+    setName,
+    setDescription,
+    setActivationDate,
+    setExpirationDate,
+    isDemo,
+    setIsDemo,
+    setAsset,
+  };
+  // const [addNewCommunity] = useAddNewCommunityMutation();
+  const onNewCommunity = async () => {
+    handleClose();
+    try {
+      await addNewCommunity({
+        admin_id: user.id,
+        name,
+        type: isDemo ? "DEMO" : "PROD",
+      }).unwrap();
+    } catch (err) {
+      dispatch(openNotificationPopup({ notification: err, type: "error" }));
+    }
+  };
+
   return (
     <DashboardLayout>
-      <Header name={user?.email ?? "Not Authorized"} />
+      <Header name={user?.email ?? "Not Authorized"} onCreate={handleOpenModal} />
       <SoftBox pt={1} pb={2}>
         <SoftBox mt={{ xs: 1, lg: 3 }} mb={1}>
           <Grid container spacing={3}>
@@ -60,34 +100,16 @@ function ListCampaigns() {
         </SoftBox>
       </SoftBox>
       <SoftBox display="flex" flexDirection="column" mt="1rem" textAlign="justify">
-        <SoftBox display="flex" flexDirection="row" mt="1rem">
-          <GradeIcon
-            fontSize="small"
-            sx={{ marginTop: "auto", marginBottom: "auto", marginRight: "1.5rem" }}
-          />
-          <SoftTypography variant="body2" color="text">
-            Staked tokens can be withdrawn at any time
-          </SoftTypography>
-        </SoftBox>
-        <SoftBox display="flex" flexDirection="row" mt="1rem">
-          <GradeIcon
-            fontSize="small"
-            sx={{ marginTop: "auto", marginBottom: "auto", marginRight: "1.5rem" }}
-          />
-          <SoftTypography variant="body2" color="text">
-            Hourly rewards will be compounded (added to the total stake and earn interest)
-          </SoftTypography>
-        </SoftBox>
-        <SoftBox display="flex" flexDirection="row" mt="1rem">
-          <GradeIcon
-            fontSize="small"
-            sx={{ marginTop: "auto", marginBottom: "auto", marginRight: "1.5rem" }}
-          />
-          <SoftTypography variant="body2" color="text">
-            A small gas fee is charged for Stake and Unstake operations
-          </SoftTypography>
-        </SoftBox>
+        <NoteItem label="Staked tokens can be withdrawn at any time" />
+        <NoteItem label="Hourly rewards will be compounded (added to the total stake and earn interest)" />
+        <NoteItem label="A small gas fee is charged for Stake and Unstake operations" />
       </SoftBox>
+      <ModalDefault
+        open={openModal}
+        onClickConfirm={() => {}}
+        onClickClose={handleCloseModal}
+        children={<NewCampaign {...newCampaignProps} />}
+      />
       <Footer />
     </DashboardLayout>
   );

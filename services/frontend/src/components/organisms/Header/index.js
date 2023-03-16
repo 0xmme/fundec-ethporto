@@ -36,7 +36,7 @@ import curved0 from "assets/images/curved0.jpg";
 import Cube from "components/atoms/Icons/Cube";
 import Document from "components/atoms/Icons/Document";
 
-function Header({ name }) {
+function Header({ name, onCreate }) {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [tabValue, setTabValue] = useState(0);
   const handleSetTabValue = (event, newValue) => setTabValue(newValue);
@@ -94,7 +94,7 @@ function Header({ name }) {
         }}
       >
         <Grid container spacing={3} alignItems="center">
-          <Grid item item xs={12} md={6} lg={4}>
+          <Grid item xs={12} md={6} lg={4}>
             <SoftBox height="100%" mt={0.5} lineHeight={1}>
               <SoftTypography variant="h5" fontWeight="medium">
                 {name}
@@ -119,7 +119,7 @@ function Header({ name }) {
           </Grid>
           <Grid item xs={12} md={6} lg={2} sx={{ ml: "auto" }}>
             <SoftBox display="flex" flexDirection="row-reverse">
-              <SoftButton variant="gradient" color="info" marginLeft="auto">
+              <SoftButton variant="gradient" color="info" marginLeft="auto" onClick={onCreate}>
                 + New Campaign
               </SoftButton>
             </SoftBox>

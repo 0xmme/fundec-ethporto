@@ -1,4 +1,3 @@
-import console from "console-browserify";
 import apiSlice from "state/api/apiSlice";
 import { setCredentials } from "state/auth/authSlice";
 import { logOut } from "./authSlice";

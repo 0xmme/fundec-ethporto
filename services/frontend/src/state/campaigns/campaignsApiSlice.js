@@ -1,26 +1,23 @@
-import console from "console-browserify";
 import { createEntityAdapter } from "@reduxjs/toolkit";
 
 import apiSlice from "../api/apiSlice";
 
-const communitiesAdapter = createEntityAdapter({});
+const campaignsAdapter = createEntityAdapter({});
 
-const initialState = communitiesAdapter.getInitialState({});
+const initialState = campaignsAdapter.getInitialState({});
 
-export const communitiesApiSlice = apiSlice.injectEndpoints({
+export const campaignsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getCommunities: builder.query({
+    getCampaigns: builder.query({
       query: () => ({
-        url: `/communities/`,
+        url: `/campaigns/`,
         validateStatus: (response, result) => {
-          console.log(response);
           return response.status === 200 && !result?.isError;
         },
       }),
       transformResponse: (responseData) => {
-        console.log(responseData);
         if (responseData) {
-          return communitiesAdapter.setAll(initialState, responseData);
+          return campaignsAdapter.setAll(initialState, responseData);
         }
       },
       providesTags: (result, error, arg) => {
@@ -35,6 +32,6 @@ export const communitiesApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetCommunitiesQuery } = communitiesApiSlice;
+export const { useGetCampaignsQuery } = campaignsApiSlice;
 
-export const { selectAll: selectAllCommunities } = communitiesAdapter.getSelectors();
+export const { selectAll: selectAllCampaigns } = campaignsAdapter.getSelectors();
