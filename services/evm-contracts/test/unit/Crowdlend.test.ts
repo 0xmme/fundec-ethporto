@@ -88,9 +88,14 @@ describe("Single Crowdlend contract", function () {
         .connect(campaignUser)
         .increaseAllowance(crowdlend.address, 1000);
     });
-
+    
     it("User should be able to pledge", async function () {
       await expect(crowdlend.connect(campaignUser).pledge(500)).to.not.be
+        .reverted;
+    });
+ 
+    it("User should be able to pledge", async function () {
+      await expect(crowdlend.connect(campaignUser).pledgeNative({value:500})).to.not.be
         .reverted;
     });
 

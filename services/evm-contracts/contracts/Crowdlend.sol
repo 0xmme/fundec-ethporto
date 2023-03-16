@@ -81,6 +81,18 @@ contract Crowdlend is Ownable {
         emit Pledge(msg.sender, _amount);
     }
 
+    function pledgeNative() external payable {
+        if (block.timestamp < campaign.startAt || 
+            block.timestamp > campaign.endAt || 
+            msg.value == 0) {
+            revert Crowdlend__ErrorPledging();
+        }
+        
+        campaign.pledged += msg.value;
+        pledgedAmount[msg.sender] += msg.value;
+
+        emit Pledge(msg.sender, msg.value);
+    }
 
     function unPledge(uint _id,uint _amount) external {
         if (block.timestamp >= campaign.startAt || 
