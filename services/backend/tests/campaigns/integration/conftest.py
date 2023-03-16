@@ -13,7 +13,7 @@ def test_campaign(test_app_with_db):
                 "asset": "MCK",
                 "apy": 8,
                 "goal": 10000,
-                "owner_address": "0x23618e81E3f5cdF7f54C3d65f7FBc0aBf5B21E8f",
+                "owner_address": "0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc",
             }
 
     response = test_app_with_db.post(

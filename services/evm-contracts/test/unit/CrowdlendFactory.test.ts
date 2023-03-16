@@ -36,8 +36,8 @@ describe("CrowdlendFactory contract", function () {
     it("Campaign owner should be able to create campaign", async function () {
       await expect(
         crowdlendFactory
-          .connect(campaignOwner)
-          .createCampaign(mockERC20.address, GOAL, endAt)
+          .connect(DAO)
+          .createCampaign(campaignOwner.address, mockERC20.address, GOAL, endAt)
       ).to.be.not.reverted;
     });
 

@@ -36,8 +36,8 @@ describe("Single Crowdlend contract", function () {
     // create campaign
     let campaignAddress: string = "";
     await crowdlendFactory
-      .connect(campaignOwner)
-      .createCampaign(mockERC20.address, GOAL, endAt)
+      .connect(DAO)
+      .createCampaign(campaignOwner.address, mockERC20.address, GOAL, endAt)
       .then((tx) => tx.wait())
       .then((receipt) => {
         campaignAddress = receipt.logs[0].address;

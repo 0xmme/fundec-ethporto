@@ -28,7 +28,7 @@ async def create_new_campaign(owner_address: str) -> str:
     end_date = datetime.utcnow() + timedelta(minutes=1)
     unix_timestamp = int(end_date.timestamp())
 
-    transaction = crowdfund_factory.functions.createCampaign(mock_erc20_address, 1000, unix_timestamp).build_transaction(
+    transaction = crowdfund_factory.functions.createCampaign(owner_address, mock_erc20_address, 1000, unix_timestamp).build_transaction(
     {
         "chainId": 31337,
         "gasPrice": web3.eth.gas_price,

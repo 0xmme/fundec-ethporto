@@ -1,5 +1,5 @@
 import { createEntityAdapter } from "@reduxjs/toolkit";
-
+import console from "console-browserify";
 import apiSlice from "../api/apiSlice";
 
 const campaignsAdapter = createEntityAdapter({});
@@ -12,10 +12,12 @@ export const campaignsApiSlice = apiSlice.injectEndpoints({
       query: () => ({
         url: `/campaigns/`,
         validateStatus: (response, result) => {
+          console.log(response);
           return response.status === 200 && !result?.isError;
         },
       }),
       transformResponse: (responseData) => {
+        console.log(responseData);
         if (responseData) {
           return campaignsAdapter.setAll(initialState, responseData);
         }

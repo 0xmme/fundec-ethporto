@@ -44,12 +44,12 @@ function ListCampaigns() {
   const user = useSelector(selectCurrentUser);
 
   // READ campaigns
-  const { data: communities, isSuccess } = useGetCampaignsQuery("campaignsList", {
+  const { data: campaigns, isSuccess } = useGetCampaignsQuery(undefined, {
     refetchOnFocus: true,
   });
-
+  console.log(campaigns);
   if (isSuccess) {
-    const { ids, entities } = communities;
+    const { ids, entities } = campaigns;
   }
 
   // Modals
