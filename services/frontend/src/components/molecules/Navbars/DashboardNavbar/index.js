@@ -12,7 +12,7 @@ Coded by www.creative-tim.com
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
-
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // prop-types is a library for typechecking of props.
@@ -25,15 +25,14 @@ import Toolbar from "@mui/material/Toolbar";
 // Soft UI Dashboard PRO React components
 import SoftBox from "components/atoms/SoftBox";
 import SoftButton from "components/atoms/SoftButton";
-import SoftTypography from "components/atoms/SoftTypography";
 import LogoutIcon from "./LogoutIcon";
 
 // Custom styles for DashboardNavbar
 import { navbar, navbarRow } from "components/molecules/Navbars/DashboardNavbar/styles";
 
 // Moralis
-import ConnectButton from "components/atoms/SoftButton/ConnectButton";
-
+import ConnectButton from "components/molecules/ConnectButton";
+import ConnectModal from "components/molecules/ConnectButton/connect-wallet-modal";
 // Redux
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser, logOut } from "state/auth/authSlice";
@@ -43,6 +42,8 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const dispatch = useDispatch();
 
   const user = useSelector(selectUser);
+
+  const [isConnectModal, setConnectModal] = useState(false);
 
   const onClickLogout = () => {
     dispatch(logOut());
@@ -58,7 +59,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
               {user ? (
                 <>
                   <SoftBox mr={2}>
-                    <ConnectButton color="light" />
+                    <ConnectButton onClick={() => setConnectModal(true)} />
                   </SoftBox>
                   <LogoutIcon onClick={onClickLogout} light />
                 </>
@@ -67,6 +68,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                   {"Sign In"}
                 </SoftButton>
               )}
+              {isConnectModal && <ConnectModal onClose={() => setConnectModal(false)} />}
             </SoftBox>
           </SoftBox>
         )}

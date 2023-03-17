@@ -95,17 +95,18 @@ export default function Landing({ activeStepProp = 0 }) {
     (activeStep === 2 && getStepContent(activeStep).validationFunction(code)) ||
     isLoadingSend;
   const onChangeValue = (e) => {
+    const value = e.target.value;
     switch (activeStep) {
       case 1:
         setInputError(email.length > 0 ? !canSend : null);
         setInputSuccess(email.length > 0 ? canSend : null);
-        setInputValue(email);
-        return setEmail(e.target.value);
+        setInputValue(value);
+        return setEmail(value);
       case 2:
         setInputError(code.length > 0 ? !canSend : null);
         setInputSuccess(code.length > 0 ? canSend : null);
-        setInputValue(code);
-        return setCode(e.target.value);
+        setInputValue(value);
+        return setCode(value);
       default:
         return;
     }
@@ -183,7 +184,7 @@ export default function Landing({ activeStepProp = 0 }) {
                 onChange={onChangeValue}
                 error={inputError}
                 success={inputSuccess}
-                value={inputValue}
+                defvalue={inputValue}
               />
             </SoftBox>
             <SoftBox flexGrow={1}>

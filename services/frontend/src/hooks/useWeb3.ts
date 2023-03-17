@@ -17,7 +17,6 @@ export const useWeb3 = () => {
       setConnected(false);
     },
     onError: (e: Error) => {
-      console.error(e);
       setError(e.message);
     },
   };
