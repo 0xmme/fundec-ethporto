@@ -37,9 +37,9 @@ contract Crowdlend is Ownable {
     );
     event Cancel();
     event Pledge(address indexed caller, uint amount);
-    event Unpledge(uint indexed id, address indexed caller, uint amount);
-    event Claim(uint id);
-    event Refund(uint id, address indexed caller, uint amount);
+    event Unpledge(address indexed caller, uint amount);
+    event Claim(uint indexed amount);
+    event Refund(address indexed caller, uint amount);
 
     //----------------- FUNCTIONS ---------------
     constructor(address _token) {
@@ -73,7 +73,8 @@ contract Crowdlend is Ownable {
     function pledge(uint _amount) external {
         if (block.timestamp < campaign.startAt || 
             block.timestamp > campaign.endAt || 
-            token.balanceOf(msg.sender) < _amount) {
+            token.balanceOf(msg.sender) < _amount ||
+            campaign.pledged + _amount > campaign.goal) {
             revert Crowdlend__ErrorPledging();
         }
         
@@ -84,30 +85,57 @@ contract Crowdlend is Ownable {
         emit Pledge(msg.sender, _amount);
     }
 
-    function pledgeNative() external payable {
+    function repay(uint _amount) external {
+        if(block.timestamp < campaign.endAt ||
+            _amount < (campaign.pledged * campaign.apy)/100 + campaign.pledged){
+            revert Crowdlend__ErrorClaiming();
+        }
+
+        token.approve(address(this), _amount);
+        token.transferFrom(msg.sender, address(this), _amount);
+        
+
+    } 
+
+    function claimFunds() external onlyOwner{
         if (block.timestamp < campaign.startAt || 
-            block.timestamp > campaign.endAt || 
-            msg.value == 0) {
+            block.timestamp > campaign.endAt || campaign.claimed) {
             revert Crowdlend__ErrorPledging();
         }
-        
-        campaign.pledged += msg.value;
-        pledgedAmount[msg.sender] += msg.value;
+        campaign.claimed = true;
+        token.transfer(msg.sender, campaign.pledged);
 
-        emit Pledge(msg.sender, msg.value);
+        emit Claim(campaign.pledged);
     }
 
-    function unPledge(uint _id,uint _amount) external {
+    function unPledge(uint _amount) external {
         if (block.timestamp >= campaign.startAt || 
             block.timestamp <= campaign.endAt || 
             pledgedAmount[msg.sender] >= _amount) {
             revert Crowdlend__ErrorUnpledging();
         }
-
+        
         token.transferFrom(address(this), msg.sender, _amount);
         campaign.pledged -= _amount;
         pledgedAmount[msg.sender] -= _amount;
 
-        emit Unpledge(_id, msg.sender, _amount);
+        emit Unpledge(msg.sender, _amount);
+    }
+
+    function claimPledged() external {
+        if (block.timestamp <= campaign.endAt) {
+            revert Crowdlend__ErrorClaiming();
+        }
+
+    uint pa = pledgedAmount[msg.sender];
+    pledgedAmount[msg.sender] = 0;
+    uint totalFunds = pa + (campaign.apy * pa)/100;
+
+    token.approve(address(this), totalFunds);
+    token.transferFrom(address(this), msg.sender, totalFunds);
+    
+    campaign.pledged -= totalFunds;
+
+    emit Claim(pa);
     }
 }
