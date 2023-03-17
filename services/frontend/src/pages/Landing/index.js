@@ -16,6 +16,7 @@ Coded by www.creative-tim.com
 // React
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import console from "console-browserify";
 
 // Soft UI Dashboard PRO React components
 import SoftBox from "components/atoms/SoftBox";
