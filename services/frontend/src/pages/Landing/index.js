@@ -24,7 +24,7 @@ import SoftInput from "components/atoms/SoftInput";
 import SoftButton from "components/atoms/SoftButton";
 
 // Images
-const curved9 = require("assets/images/curved9.jpg");
+const curved9 = require("assets/images/fundec-cover.png");
 
 // Authentication layout components
 import AuthCoverLayout from "components/organisms/LayoutContainers/CoverLayout/AuthCoverLayout";
