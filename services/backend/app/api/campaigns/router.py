@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from app.db import get_db
 from . import crud
 from .schemas import CampaignPayloadSchema, CampaignResponseSchema
-from .service import create_new_campaign
+from .service import read_new_campaign
 
 router = APIRouter()
 
@@ -16,7 +16,7 @@ async def post_campaign(
     db: Session = Depends(get_db),
 ):
 
-    deposit_address = await create_new_campaign(campaign.owner_address)
+    deposit_address = await read_new_campaign()
     campaign.deposit_address = deposit_address
     new_campaign = await crud.add_campaign(campaign, db)
     

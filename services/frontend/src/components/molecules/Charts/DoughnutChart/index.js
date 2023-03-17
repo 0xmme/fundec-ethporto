@@ -32,7 +32,7 @@ import configs from "components/molecules/Charts/DoughnutChart/configs";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-function DoughnutChart({ title, description, height, chart }) {
+function DoughnutChart({ title, description, height, chart, value }) {
   const { data, options } = configs(chart.labels || [], chart.datasets || {}, chart.cutout);
 
   const renderChart = (
@@ -61,7 +61,7 @@ function DoughnutChart({ title, description, height, chart }) {
           flexDirection="row"
         >
           <SoftTypography variant="h2" color="info" fontWeight="bold">
-            10%
+            {value}%
           </SoftTypography>
           <SoftBox marginTop="auto" marginBottom="auto" marginLeft="0.3rem">
             <SoftTypography variant="h6">APY</SoftTypography>

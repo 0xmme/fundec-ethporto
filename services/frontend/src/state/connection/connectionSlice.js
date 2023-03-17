@@ -7,7 +7,6 @@ const connectionSlice = createSlice({
     web3Status: "disconnected",
     chainId: undefined,
     signingMessage: "",
-    chainId: undefined,
   },
   reducers: {
     setIsConnectModalOpen: (state, action) => {

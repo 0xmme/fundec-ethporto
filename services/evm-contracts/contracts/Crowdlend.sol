@@ -50,11 +50,13 @@ contract Crowdlend is Ownable {
 
 
     function launch(address _creator, uint32 _apy, uint _goal, uint256 _startAt, uint256 _endAt) onlyOwner external {
-      
+        
+        console.log(2);
         if(_endAt < _startAt || 
         state != CampaignState.OPEN){
             revert Crowdlend__InvalidDate();
         }
+        console.log(3);
 
         campaign = Campaign({
             creator: _creator,
@@ -66,6 +68,7 @@ contract Crowdlend is Ownable {
             claimed: false
         });
 
+        console.log(4);
         transferOwnership(_creator);
         state = CampaignState.LAUNCHED;
         emit Launch(msg.sender, _apy,_goal,_startAt,_endAt);

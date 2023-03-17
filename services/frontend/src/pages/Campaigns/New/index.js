@@ -6,6 +6,9 @@ import { DateTime } from "luxon";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
+// dappKit
+import useAddress from "hooks/useAddress";
+
 // Soft UI Dashboard PRO React components
 import SoftBox from "components/atoms/SoftBox";
 import SelectDefault from "components/molecules/InputFields/SelectDefault";
@@ -29,18 +32,17 @@ function NewCampaign({
   setAsset,
   setGoal,
   setApy,
-  setOwnerAddress,
 }) {
+  const { address: ownerAddress = "" } = useAddress();
   const onNameChange = (e) => setName(e.target.value);
-  const onDescriptionChange = (e) => setDescription(e);
   const onAddressChange = (e) => setAddress(e.target.value);
+  const onDescriptionChange = (e) => setDescription(e);
   const onActivationDateChange = (date) => setActivationDate(date[0]);
   const onExpirationDateChange = (date) => setExpirationDate(date[0]);
   const onIsDemoChange = () => setIsDemo(!isDemo);
   const onAssetChange = (e) => setAsset(e.value);
   const onGoalChange = (e) => setGoal(Number(e.target.value));
   const onApyChange = (e) => setApy(Number(e.target.value));
-  const onOwnerAddressChange = (e) => setOwnerAddress(e.target.value);
 
   return (
     <SoftBox mt={0} mb={4}>
@@ -118,8 +120,8 @@ function NewCampaign({
               <InputDefault
                 type="test"
                 label="Your ETH Address"
-                defaultValue={""}
-                onChange={onOwnerAddressChange}
+                value={ownerAddress ?? ""}
+                disabled
               />
             </Grid>
           </>

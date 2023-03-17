@@ -17,7 +17,6 @@ Coded by www.creative-tim.com
 import { useState } from "react";
 import { DateTime } from "luxon";
 import console from "console-browserify";
-
 // @mui material components
 import Grid from "@mui/material/Grid";
 
@@ -28,7 +27,7 @@ import Footer from "components/molecules/Footer";
 
 // Project page components
 import Header from "components/organisms/Header";
-import CommunityCard from "./CampaignCard";
+import CampaignCard from "./CampaignCard";
 import NoteItem from "./NoteItem";
 import ModalDefault from "components/molecules/Modals";
 import NewCampaign from "pages/Campaigns/New";
@@ -37,20 +36,26 @@ import "react-toastify/dist/ReactToastify.css";
 
 // Redux
 import { useSelector } from "react-redux";
-import { useGetCampaignsQuery } from "state/campaigns/campaignsApiSlice";
+import { useGetCampaignsQuery, useCreate } from "state/campaigns/campaignsApiSlice";
 import { selectUser } from "state/auth/authSlice";
+
+// dappKit
+import { Model } from "@taikai/dappkit";
+import { Web3Connection } from "@taikai/dappkit";
+import useAddress from "hooks/useAddress";
+
+// abi
+import CrowndlendFactory from "abis/CrowdlendFactory.json";
+import { useAddNewCampaignMutation } from "../../../state/campaigns/campaignsApiSlice";
 
 function ListCampaigns() {
   const user = useSelector(selectUser);
+  const { address: ownerAddress = "" } = useAddress();
 
   // READ campaigns
   const { data: campaigns, isSuccess } = useGetCampaignsQuery(undefined, {
     refetchOnFocus: true,
   });
-  console.log(campaigns);
-  if (isSuccess) {
-    const { ids, entities } = campaigns;
-  }
 
   // Modals
   const [openModal, setOpenModal] = useState(false);
@@ -67,7 +72,6 @@ function ListCampaigns() {
   const [asset, setAsset] = useState(null);
   const [apy, setApy] = useState(null);
   const [goal, setGoal] = useState(null);
-  const [ownerAddress, setOwnerAddress] = useState(null);
 
   const newCampaignProps = {
     setName,
@@ -81,10 +85,9 @@ function ListCampaigns() {
     setAsset,
     setApy,
     setGoal,
-    setOwnerAddress,
   };
   const onSave =
-    [activationDate, expirationDate, asset, apy, goal, ownerAddress].every(Boolean) &&
+    [activationDate, expirationDate, asset, apy, goal].every(Boolean) &&
     [goal, apy].every(Number) &&
     goal > 0 &&
     apy > 0 &&
@@ -94,10 +97,38 @@ function ListCampaigns() {
     activationDate < expirationDate &&
     activationDate > new Date();
 
-  const onNewCommunity = async () => {
+  const [addNewCampaign] = useAddNewCampaignMutation();
+  const onNewCampaign = async () => {
     handleCloseModal();
     const id = toast.loading("Please wait...");
     try {
+      // Provide the custom provider to Web3Connection
+      const web3Connection = new Web3Connection({ web3Host: "http://localhost:8545" });
+      web3Connection.start();
+      await web3Connection.connect();
+
+      const CrowndlendFactoryModel = new Model(
+        web3Connection,
+        CrowndlendFactory.abi,
+        "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
+      );
+
+      await CrowndlendFactoryModel.start();
+
+      // Change a value on the contract
+      console.log(ownerAddress);
+      const receipt = await CrowndlendFactoryModel.sendTx(
+        CrowndlendFactoryModel.contract.methods.createCampaign(
+          ownerAddress,
+          apy,
+          "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+          goal,
+          Math.floor(activationDate / 1000),
+          Math.floor(expirationDate / 1000)
+        )
+      );
+      const campaignAddress = receipt;
+
       const payload = {
         name,
         description,
@@ -111,13 +142,15 @@ function ListCampaigns() {
         owner_address: ownerAddress,
       };
 
+      await addNewCampaign(payload);
       toast.update(id, {
-        render: "All is good",
+        render: "Campaign created!",
         type: toast.TYPE.SUCCESS,
         isLoading: false,
         autoClose: 1000,
       });
     } catch (err) {
+      console.log(err);
       toast.update(id, {
         render: "Something went wrong...",
         type: toast.TYPE.ERROR,
@@ -133,9 +166,25 @@ function ListCampaigns() {
       <SoftBox pt={1} pb={2}>
         <SoftBox mt={{ xs: 1, lg: 3 }} mb={1}>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6} lg={5}>
-              <CommunityCard />
-            </Grid>
+            {isSuccess &&
+              campaigns.ids.map((id) => {
+                const campaign = campaigns.entities[id];
+
+                console.log(campaign);
+                const cardProps = {
+                  title: campaign.name,
+                  location: campaign.address,
+                  description,
+                  apy: campaign.apy,
+                  startDate: DateTime.fromISO(campaign.activation_date).toFormat("yyyy-MM-dd"),
+                  endDate: DateTime.fromISO(campaign.expiration_date).toFormat("yyyy-MM-dd"),
+                };
+                return (
+                  <Grid item xs={12} md={6} lg={4}>
+                    <CampaignCard {...cardProps} />
+                  </Grid>
+                );
+              })}
           </Grid>
         </SoftBox>
       </SoftBox>
@@ -147,7 +196,7 @@ function ListCampaigns() {
       <ModalDefault
         open={openModal}
         onConfirm={onSave}
-        onClickConfirm={onNewCommunity}
+        onClickConfirm={onNewCampaign}
         onClickClose={handleCloseModal}
         children={<NewCampaign {...newCampaignProps} />}
       />
