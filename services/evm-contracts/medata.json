@@ -1,0 +1,16 @@
+{
+    "name": "Energy Community Member NFT",
+    "description": "This NFT represents membership in our energy community and commitment to sustainable energy practices.",
+    "image": "ipfs://bafkreidvktgzb6nhjkaq7grjjbo4jzpev3ef3irayausmafsnyah57tlla",
+    "attributes": [
+       {
+          "trait_type": "Community Role",
+          "value": "Active Member"
+       },
+       {
+          "trait_type": "Sustainability Focus",
+          "value": "PV Panels"
+       }
+    ]
+ }
+ 
