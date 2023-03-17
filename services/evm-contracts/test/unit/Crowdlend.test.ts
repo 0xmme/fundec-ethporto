@@ -1,7 +1,7 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { time, mine } from "@nomicfoundation/hardhat-network-helpers";
+import { time, mine, reset} from "@nomicfoundation/hardhat-network-helpers";
 
 import { BigNumber } from "ethers";
 
@@ -10,6 +10,7 @@ import { CrowdlendFactory, Crowdlend, MockToken } from "../../typechain-types";
 import { ICampaign } from "../../scripts/schemas";
 
 describe("Single Crowdlend contract", function () {
+  
   let crowdlendFactory: CrowdlendFactory;
   let crowdlend: Crowdlend;
   let mockERC20: MockToken;
@@ -18,13 +19,14 @@ describe("Single Crowdlend contract", function () {
   let campaignUser: SignerWithAddress;
   let attacker: SignerWithAddress;
 
-  const GOAL = "100000000000000000";
-  const startAt = Math.floor(Date.now() / 1000);
+  const GOAL = "1000";
+  const startAt = Math.floor(Date.now() / 1000) + 3600;
   // const startAt2 = Math.floor(Date.now() / 1000) + 3600;
   const endAt = Math.floor(Date.now() / 1000) + 10800;
   const apy = 5;
 
   beforeEach(async function () {
+    await reset();
     const signers: SignerWithAddress[] = await ethers.getSigners();
     DAO = signers[0];
     campaignOwner = signers[1];
@@ -76,7 +78,7 @@ describe("Single Crowdlend contract", function () {
       const campaign: ICampaign = await crowdlend.campaign();
       expect(campaign.creator).to.equal(campaignOwner.address);
       expect(campaign.apy).to.equal(apy);
-      expect(campaign.goal).to.equal("100000000000000000");
+      expect(campaign.goal).to.equal("1000");
       expect(campaign.startAt).to.equal(startAt);
       expect(campaign.endAt).to.equal(endAt);
     });
@@ -102,17 +104,13 @@ describe("Single Crowdlend contract", function () {
     });
     
     it("User should be able to pledge", async function () {
+      await crowdlend.connect(campaignUser).pledge(500);
       await expect(crowdlend.connect(campaignUser).pledge(500)).to.not.be
         .reverted;
     });
 
     it("User should not be able to pledge if it does not have enough allowance", async function () {
       await expect(crowdlend.connect(campaignUser).pledge(2000)).to.be.reverted;
-    });
-
-    it("User should not be able to pledge if it campaign has ended", async function () {
-      await time.increase(3600);
-      expect(crowdlend.connect(campaignUser).pledge(500)).to.be.reverted;
     });
   });
 
@@ -126,7 +124,6 @@ describe("Single Crowdlend contract", function () {
     });
     
     it("User should be able to pledge", async function () {
-      // console.log(await mockERC20.balanceOf(campaignUser.address))
       expect(crowdlend.connect(campaignUser).pledge(500)).to.not.be
         .reverted;
     });
@@ -135,30 +132,53 @@ describe("Single Crowdlend contract", function () {
       await expect(crowdlend.connect(campaignUser).pledge(2000)).to.be.reverted;
     });
 
-    it("User should not be able to pledge if it campaign has ended", async function () {
+    it("User should be able to unpledge", async function () {
+      mockERC20.connect(campaignUser);
+      await mockERC20.approve(crowdlend.address, 500);
+      crowdlend.connect(campaignUser);
+      expect(crowdlend.unPledge(500)).to.emit(crowdlend.address,"Unpledge");
+    });
+
+    it("User should be able to unpledge more than the pledged amount", async function () {
+      expect(crowdlend.connect(campaignUser).unPledge(600)).to.be
+        .reverted;
+    });
+
+    it("User should not be able to unpledge after the campaign starts", async function () {
       await time.increase(3600);
-      expect(crowdlend.connect(campaignUser).pledge(500)).to.be.reverted;
+      expect(crowdlend.connect(campaignUser).unPledge(500)).to.be
+        .reverted;
     });
 
     it("Creator should be able to claim funds", async function () {
+      await crowdlend.connect(campaignUser).pledge(1000);
+      await time.increase(3600)
       const balance = await mockERC20.balanceOf(campaignOwner.address);
-      await crowdlend.connect(campaignUser).pledge(500);
       await crowdlend.connect(campaignOwner).claimFunds();
-      expect((await mockERC20.balanceOf(campaignOwner.address))).to.be.equal(balance.add(500))
+      expect((await mockERC20.balanceOf(campaignOwner.address))).to.be.equal(balance.add(1000))
     });
 
-    it("Investor should be able to claim funds", async function () {
+    it("Investor should be able to claim funds after the campaing ends", async function () {
       // const balance = await mockERC20.balanceOf(campaignUser.address);
-      // const allowance = await mockERC20.allowance(campaignOwner.address,crowdlend.address)
-      // await console.log(balance, allowance)
-      await crowdlend.connect(campaignUser).pledge(500);
-      await time.increase(3600)
-      await console.log(await mockERC20.balanceOf(campaignUser.address))
+      await crowdlend.connect(campaignUser).pledge(1000);
+      await time.increase(3600+10800);
+      mockERC20.connect(campaignOwner);
+      await mockERC20.approve(crowdlend.address, 1050);
+      crowdlend.connect(campaignOwner);
+      await crowdlend.repay(1050);
       await crowdlend.connect(campaignUser).claimPledged();
-      await console.log(await mockERC20.balanceOf(campaignUser.address))
+      const balance = await mockERC20.balanceOf(campaignUser.address);
+      expect((await mockERC20.balanceOf(campaignUser.address))).to.be.equal(1050)
+    });
 
-      // console.log(await mockERC20.balanceOf(campaignUser.address))
-      // expect((await mockERC20.balanceOf(campaignUser.address))).to.be.equal(balance.add(500))
+    it("Investor should not be able to claim funds after the campaing ends", async function () {
+      // const balance = await mockERC20.balanceOf(campaignUser.address);
+      await crowdlend.connect(campaignUser).pledge(1000);
+      mockERC20.connect(campaignOwner);
+      await mockERC20.approve(crowdlend.address, 1050);
+      crowdlend.connect(campaignOwner);
+      await crowdlend.repay(1050);
+      expect(crowdlend.connect(campaignUser).claimPledged()).to.be.reverted
     });
   });
 });

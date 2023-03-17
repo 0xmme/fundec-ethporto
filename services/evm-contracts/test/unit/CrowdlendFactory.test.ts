@@ -32,7 +32,7 @@ describe("CrowdlendFactory contract", function () {
 
   describe("Create campaign", function () {
     const GOAL = "100000000000000000";
-    const startAt = Math.floor(Date.now() / 1000);
+    const startAt = Math.floor(Date.now() / 1000) + 3600;
     const endAt = Math.floor(Date.now() / 1000) + 7200;
     const apy = 5;
     it("Campaign owner should be able to create campaign", async function () {
