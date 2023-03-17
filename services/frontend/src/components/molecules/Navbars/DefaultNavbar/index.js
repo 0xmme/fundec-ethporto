@@ -14,7 +14,7 @@ Coded by www.creative-tim.com
 */
 
 import { useState, useEffect } from "react";
-
+import { useNavigate } from "react-router-dom";
 // react-router components
 import { Link } from "react-router-dom";
 
@@ -37,6 +37,7 @@ import DefaultNavbarItem from "components/molecules/Navbars/DefaultNavbar/Defaul
 import breakpoints from "assets/theme/base/breakpoints";
 
 function DefaultNavbar({ transparent, light, action }) {
+  const navigate = useNavigate();
   const [mobileNavbar, setMobileNavbar] = useState(false);
   const [mobileView, setMobileView] = useState(false);
 
@@ -104,7 +105,11 @@ function DefaultNavbar({ transparent, light, action }) {
           marginLeft="auto"
           marginRight="20px"
         >
-          <DefaultNavbarItem name="Discover" light={light} />
+          <DefaultNavbarItem
+            name="Discover"
+            light={light}
+            onClick={() => navigate("/open-campaigns")}
+          />
           <DefaultNavbarItem name="Create Campaign" light={light} />
         </SoftBox>
         {action &&

@@ -20,7 +20,7 @@ def create_application() -> FastAPI:
     application.include_router(campaigns.router, prefix="/api/campaigns", tags=["Campaigns"])
     application.include_router(users.router, prefix="/api/users", tags=["Auth"])
 
-    origins = ["http://localhost:2000","*"]
+    origins = ["http://localhost:2000"]
     
     application.add_middleware(
         CORSMiddleware,

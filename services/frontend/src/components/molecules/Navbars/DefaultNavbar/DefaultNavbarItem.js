@@ -52,20 +52,14 @@ function DefaultNavbarItem({ name, light, ...rest }) {
 
 // Setting default values for the props of DefaultNavbarLink
 DefaultNavbarItem.defaultProps = {
-  openHandler: false,
-  closeHandler: false,
   children: false,
-  collapseStatus: false,
   light: false,
 };
 
 // Typechecking props for the DefaultNavbarLink
 DefaultNavbarItem.propTypes = {
   name: PropTypes.string.isRequired,
-  openHandler: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
-  closeHandler: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
   children: PropTypes.node,
-  collapseStatus: PropTypes.bool,
   light: PropTypes.bool,
 };
 

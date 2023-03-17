@@ -30,15 +30,15 @@ import AuthCoverLayout from "components/organisms/LayoutContainers/CoverLayout/A
 import Header from "./Header";
 
 // Redux
-import { useDispatch } from "react-redux";
-import { useSingleCodeLoginMutation, useVerifyCodeMutation } from "state/auth/authApiSlice";
-import { setCredentials } from "state/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useSendCodeMutation, useVerifyCodeMutation } from "state/auth/authApiSlice";
+import { setCredentials, selectUser } from "state/auth/authSlice";
 
 // Others
 import { validateEmail } from "utils/validations";
 
 function validateCode(value) {
-  return value.length == 157;
+  return value.length == 40;
 }
 function getStepContent(stepIndex) {
   switch (stepIndex) {
@@ -69,28 +69,56 @@ function getStepContent(stepIndex) {
 }
 
 export default function Landing({ activeStepProp = 0 }) {
-  const [value, setValue] = useState("");
-  const [activeStep, setActiveStep] = useState(activeStepProp);
-  const [error, setError] = useState(undefined);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const user = useSelector(selectUser);
 
-  const [sendLink, { isSuccess: isSuccessEmail, isError: isErrorEmail, error: errorEmail }] =
-    useSingleCodeLoginMutation();
+  const [email, setEmail] = useState("");
+  const [code, setCode] = useState("");
+  const [activeStep, setActiveStep] = useState(activeStepProp);
+  const [error, setError] = useState(undefined);
 
-  const [verifyCode, { isSuccess: isSuccessCode, isError: isErrorCode, error: errorCode }] =
+  const [inputError, setInputError] = useState(undefined);
+  const [inputSuccess, setInputSuccess] = useState(undefined);
+  const [inputValue, setInputValue] = useState(undefined);
+
+  const [
+    sendCode,
+    { isSuccess: isSuccessSend, isLoading: isLoadingSend, isError: isErrorSend, error: errorSend },
+  ] = useSendCodeMutation();
+
+  const [verifyCode, { isSuccess: isSuccessVerify, isError: isErrorVerify, error: errorVerify }] =
     useVerifyCodeMutation();
 
-  const canSend = activeStep > 0 && getStepContent(activeStep).validationFunction(value);
-  const onChangeValue = (e) => setValue(e.target.value);
+  const canSend =
+    (activeStep === 1 && getStepContent(activeStep).validationFunction(email)) ||
+    (activeStep === 2 && getStepContent(activeStep).validationFunction(code)) ||
+    isLoadingSend;
+  const onChangeValue = (e) => {
+    switch (activeStep) {
+      case 1:
+        setInputError(email.length > 0 ? !canSend : null);
+        setInputSuccess(email.length > 0 ? canSend : null);
+        setInputValue(email);
+        return setEmail(e.target.value);
+      case 2:
+        setInputError(code.length > 0 ? !canSend : null);
+        setInputSuccess(code.length > 0 ? canSend : null);
+        setInputValue(code);
+        return setCode(e.target.value);
+      default:
+        return;
+    }
+  };
+
   const onClickConfirm = async () => {
     switch (activeStep) {
       case 0:
         break;
       case 1:
-        return await sendLink({ email: value, type: "INVESTOR" });
+        return await sendCode({ email });
       case 2:
-        const user = await verifyCode({ code: value }).unwrap();
+        const user = await verifyCode({ email, code }).unwrap();
         dispatch(setCredentials(user));
       default:
         return;
@@ -100,25 +128,24 @@ export default function Landing({ activeStepProp = 0 }) {
   useEffect(() => {
     switch (activeStep) {
       case 1:
-        if (isSuccessEmail) {
-          setActiveStep(1);
-          setValue("");
+        if (isSuccessSend) {
+          setActiveStep(2);
           setError(undefined);
         }
         break;
       case 2:
-        if (isSuccessCode) {
-          navigate("/open-communities");
+        if (isSuccessVerify) {
+          navigate("/open-campaigns");
         }
         break;
       default:
         break;
     }
-  }, [isSuccessEmail, isSuccessCode]);
+  }, [isSuccessSend, isSuccessVerify]);
 
   useEffect(() => {
-    if (isErrorEmail || isErrorCode) {
-      const errorResponse = errorEmail ?? errorCode;
+    if (isErrorSend || isErrorVerify) {
+      const errorResponse = errorSend ?? errorVerify;
       setError(
         (errorResponse?.data?.message ||
           (typeof errorResponse.data?.detail == String && errorResponse?.data?.detail) ||
@@ -126,7 +153,7 @@ export default function Landing({ activeStepProp = 0 }) {
           "There has been an error. Please, try again later"
       );
     }
-  }, [isErrorEmail, isErrorCode]);
+  }, [isErrorSend, isErrorVerify]);
 
   return (
     <AuthCoverLayout
@@ -145,7 +172,7 @@ export default function Landing({ activeStepProp = 0 }) {
       description={getStepContent(activeStep).description}
       image={curved9}
     >
-      {activeStep > 0 ? (
+      {activeStep > 0 && (
         <>
           <SoftBox display="flex" flexDirection="row" justifyContent="space-between">
             <SoftBox flexGrow={3} mr={1}>
@@ -154,9 +181,9 @@ export default function Landing({ activeStepProp = 0 }) {
                 placeholder={getStepContent(activeStep).placeholder}
                 name="email"
                 onChange={onChangeValue}
-                error={value.length > 0 ? !canSend : null}
-                success={value.length > 0 ? canSend : null}
-                value={value}
+                error={inputError}
+                success={inputSuccess}
+                value={inputValue}
               />
             </SoftBox>
             <SoftBox flexGrow={1}>
@@ -184,8 +211,6 @@ export default function Landing({ activeStepProp = 0 }) {
             </h6>
           </SoftBox>
         </>
-      ) : (
-        <></>
       )}
     </AuthCoverLayout>
   );

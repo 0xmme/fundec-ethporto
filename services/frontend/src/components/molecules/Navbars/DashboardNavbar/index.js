@@ -21,12 +21,12 @@ import PropTypes from "prop-types";
 // @mui core components
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Icon from "@mui/material/Icon";
 
 // Soft UI Dashboard PRO React components
 import SoftBox from "components/atoms/SoftBox";
+import SoftButton from "components/atoms/SoftButton";
 import SoftTypography from "components/atoms/SoftTypography";
+import LogoutIcon from "./LogoutIcon";
 
 // Custom styles for DashboardNavbar
 import { navbar, navbarRow } from "components/molecules/Navbars/DashboardNavbar/styles";
@@ -34,10 +34,18 @@ import { navbar, navbarRow } from "components/molecules/Navbars/DashboardNavbar/
 // Moralis
 import ConnectButton from "components/atoms/SoftButton/ConnectButton";
 
+// Redux
+import { useSelector, useDispatch } from "react-redux";
+import { selectUser, logOut } from "state/auth/authSlice";
+
 function DashboardNavbar({ absolute, light, isMini }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const user = useSelector(selectUser);
 
   const onClickLogout = () => {
+    dispatch(logOut());
     return navigate("/");
   };
 
@@ -47,28 +55,18 @@ function DashboardNavbar({ absolute, light, isMini }) {
         {false ? null : (
           <SoftBox sx={(theme) => navbarRow(theme, { isMini: true })} marginLeft="auto">
             <SoftBox display="flex" color={light ? "white" : "inherit"}>
-              <SoftBox mr={2}>
-                <ConnectButton color="light" />
-              </SoftBox>
-              <IconButton
-                size="small"
-                color="inherit"
-                aria-controls="logout"
-                aria-haspopup="true"
-                variant="contained"
-                onClick={onClickLogout}
-              >
-                <Icon
-                  sx={({ palette: { dark, white } }) => ({
-                    color: light ? white.main : dark.main,
-                  })}
-                >
-                  account_circle
-                </Icon>
-                <SoftTypography variant="button" fontWeight="medium" color={"white"} ml={0.5}>
-                  Logout
-                </SoftTypography>
-              </IconButton>
+              {user ? (
+                <>
+                  <SoftBox mr={2}>
+                    <ConnectButton color="light" />
+                  </SoftBox>
+                  <LogoutIcon onClick={onClickLogout} light />
+                </>
+              ) : (
+                <SoftButton variant="gradient" color="light" onClick={() => navigate("/signin")}>
+                  {"Sign In"}
+                </SoftButton>
+              )}
             </SoftBox>
           </SoftBox>
         )}

@@ -1,17 +1,14 @@
-from typing import List
 from fastapi_mail import ConnectionConfig, FastMail, MessageSchema, MessageType
-from jose import jwt
 from pydantic import EmailStr
 
 from .template import create_html_email_verification
 
-
 conf = ConnectionConfig(
-    MAIL_USERNAME="fundeco.ethporto@gmail.com",
-    MAIL_PASSWORD="fundecoeth",
-    MAIL_FROM="fundeco.ethporto@gmail.com",
+    MAIL_USERNAME="fundeco.ethporto@outlook.com",
+    MAIL_PASSWORD="r2Jt3ogH37Vm%R@F",
+    MAIL_FROM="fundeco.ethporto@outlook.com",
     MAIL_PORT=587,
-    MAIL_SERVER="",
+    MAIL_SERVER="smtp.office365.com",
     MAIL_STARTTLS=True,
     MAIL_SSL_TLS=False,
     USE_CREDENTIALS=True,
@@ -33,8 +30,8 @@ async def send_email_with_code(email: EmailStr, code: str) -> bool:
     try:
         fm = FastMail(conf)
         await fm.send_message(message)
-
-    except Exception:
+    except Exception as e:
+        print(f"Error sending email: {e}")
         return False
 
     return True

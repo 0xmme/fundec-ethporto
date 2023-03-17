@@ -22,3 +22,5 @@ def test_verify_code(
     response_dict = response.json()
     assert response.status_code == 201
     assert response_dict["access_token"]
+    assert response_dict["user"]["email"] == email
+    assert response_dict["user"]["is_verified"] == True

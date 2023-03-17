@@ -4,26 +4,22 @@ import { logOut } from "./authSlice";
 
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    singleCodeLogin: builder.mutation({
-      query: ({ email, type }) => ({
-        url: "/auth/single-code-login",
+    sendCode: builder.mutation({
+      query: ({ email }) => ({
+        url: "/users/send-code/",
         method: "POST",
         body: {
           email,
-          type,
         },
       }),
     }),
     verifyCode: builder.mutation({
-      query: ({ code }) => ({
-        url: `/auth/verify-access-code`,
+      query: ({ email, code }) => ({
+        url: `/users/verify-code/?email=${email}&code=${code}`,
         method: "POST",
-        body: {
-          code,
-        },
       }),
     }),
   }),
 });
 
-export const { useSingleCodeLoginMutation, useVerifyCodeMutation } = authApiSlice;
+export const { useSendCodeMutation, useVerifyCodeMutation } = authApiSlice;

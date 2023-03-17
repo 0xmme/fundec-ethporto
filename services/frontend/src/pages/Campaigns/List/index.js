@@ -38,10 +38,10 @@ import "react-toastify/dist/ReactToastify.css";
 // Redux
 import { useSelector } from "react-redux";
 import { useGetCampaignsQuery } from "state/campaigns/campaignsApiSlice";
-import { selectCurrentUser } from "state/auth/authSlice";
+import { selectUser } from "state/auth/authSlice";
 
 function ListCampaigns() {
-  const user = useSelector(selectCurrentUser);
+  const user = useSelector(selectUser);
 
   // READ campaigns
   const { data: campaigns, isSuccess } = useGetCampaignsQuery(undefined, {

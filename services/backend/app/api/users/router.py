@@ -34,6 +34,9 @@ async def verify_code(email: str, code: str, db: Session = Depends(get_db)):
     if not user.code == code:
         raise HTTPException(status_code=400, detail="Invalid code")
 
+    update_payload = UserUpdatePayloadSchema(is_verified=True)
+    await crud.update_user_by_id(user.id, update_payload, db)
+    
     token_payload = {"id": user.id, "email": user.email}
     token = create_token(token_payload, TokenType.access)
-    return {"access_token": token, "token_type": "bearer"}
+    return {"access_token": token, "token_type": "bearer", "user": user}
