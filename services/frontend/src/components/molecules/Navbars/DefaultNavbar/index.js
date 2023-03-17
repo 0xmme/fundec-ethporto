@@ -110,6 +110,13 @@ function DefaultNavbar({ transparent, light, action }) {
             light={light}
             onClick={() => navigate("/open-campaigns")}
           />
+          <DefaultNavbarItem
+            name="Community"
+            light={light}
+            onClick={() => {
+              window.open("https://vcegi07.inesctec.pt/communities", "_blank")
+            }}
+          />
           <DefaultNavbarItem name="Create Campaign" light={light} />
         </SoftBox>
         {action &&

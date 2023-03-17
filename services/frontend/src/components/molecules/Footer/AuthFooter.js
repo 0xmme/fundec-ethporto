@@ -46,7 +46,7 @@ function AuthFooter() {
         <Grid item xs={12} lg={8}>
           <SoftBox display="flex" justifyContent="center" mt={1} mb={3}>
             <SoftBox mr={3} color="secondary">
-              <InstagramIcon fontSize="small" />
+              {/* <InstagramIcon fontSize="small" /> */}
             </SoftBox>
             <SoftBox color="secondary">
               <LinkedInIcon href="https://www.linkedin.com/company/inesc-tec/" fontSize="small" />
