@@ -29,7 +29,7 @@ import SoftBox from "components/atoms/SoftBox";
 import SoftTypography from "components/atoms/SoftTypography";
 
 // Custom styles for DashboardNavbar
-import { navbar, navbarRow } from "components/organisms/Navbars/DashboardNavbar/styles";
+import { navbar, navbarRow } from "components/molecules/Navbars/DashboardNavbar/styles";
 
 // Moralis
 import ConnectButton from "components/atoms/SoftButton/ConnectButton";

@@ -30,13 +30,13 @@ import SoftBox from "components/atoms/SoftBox";
 import SoftTypography from "components/atoms/SoftTypography";
 import SoftButton from "components/atoms/SoftButton";
 
+// Soft UI Dashboard PRO React example components
+import DefaultNavbarItem from "components/molecules/Navbars/DefaultNavbar/DefaultNavbarItem";
+
 // Soft UI Dashboard PRO React base styles
 import breakpoints from "assets/theme/base/breakpoints";
 
-// Others
-import ConnectButton from "components/atoms/SoftButton/ConnectButton";
-
-function DefaultNavbar({ routes, transparent, light, action }) {
+function DefaultNavbar({ transparent, light, action }) {
   const [mobileNavbar, setMobileNavbar] = useState(false);
   const [mobileView, setMobileView] = useState(false);
 
@@ -87,12 +87,25 @@ function DefaultNavbar({ routes, transparent, light, action }) {
         sx={({ palette: { transparent: transparentColor, white }, functions: { rgba } }) => ({
           backgroundColor: transparent ? transparentColor.main : rgba(white.main, 0.8),
           backdropFilter: transparent ? "none" : `saturate(200%) blur(30px)`,
+          boxShadow:
+            "rgb(20 20 20 / 12%) 0rem 0.25rem 0.375rem -0.0625rem, rgb(20 20 20 / 7%) 0rem 0.125rem 0.25rem -0.0625rem",
         })}
       >
         <SoftBox component={Link} to="/" py={transparent ? 1.5 : 0.75} lineHeight={1}>
           <SoftTypography variant="button" fontWeight="bold" color={light ? "white" : "dark"}>
-            Digital-REC
+            EnergYield
           </SoftTypography>
+        </SoftBox>
+        <SoftBox
+          color="inherit"
+          display={{ xs: "none", lg: "flex" }}
+          m={0}
+          p={0}
+          marginLeft="auto"
+          marginRight="20px"
+        >
+          <DefaultNavbarItem name="Discover" light={light} />
+          <DefaultNavbarItem name="Create Campaign" light={light} />
         </SoftBox>
         {action &&
           (action.type === "internal" ? (
@@ -109,19 +122,30 @@ function DefaultNavbar({ routes, transparent, light, action }) {
               </SoftButton>
             </SoftBox>
           ) : (
-            <ConnectButton color="info" />
+            <SoftBox display={{ xs: "none", lg: "inline-block" }}>
+              <SoftButton
+                component="a"
+                href={action.route}
+                variant="gradient"
+                color={action.color ? action.color : "info"}
+                size="small"
+                circular
+              >
+                {action.label}
+              </SoftButton>
+            </SoftBox>
           ))}
-        <SoftBox
-          display={{ xs: "inline-block", lg: "none" }}
-          lineHeight={0}
-          py={1.5}
-          pl={1.5}
-          color="inherit"
-          sx={{ cursor: "pointer" }}
-          onClick={openMobileNavbar}
-        >
-          <Icon fontSize="default">{mobileNavbar ? "close" : "menu"}</Icon>
-        </SoftBox>
+      </SoftBox>
+      <SoftBox
+        display={{ xs: "inline-block", lg: "none" }}
+        lineHeight={0}
+        py={1.5}
+        pl={1.5}
+        color="inherit"
+        sx={{ cursor: "pointer" }}
+        onClick={openMobileNavbar}
+      >
+        <Icon fontSize="default">{mobileNavbar ? "close" : "menu"}</Icon>
       </SoftBox>
     </Container>
   );
@@ -129,7 +153,6 @@ function DefaultNavbar({ routes, transparent, light, action }) {
 
 // Setting default values for the props of DefaultNavbar
 DefaultNavbar.defaultProps = {
-  routes: [],
   transparent: false,
   light: false,
   action: false,
@@ -137,7 +160,6 @@ DefaultNavbar.defaultProps = {
 
 // Typechecking props for the DefaultNavbar
 DefaultNavbar.propTypes = {
-  routes: PropTypes.arrayOf(PropTypes.object),
   transparent: PropTypes.bool,
   light: PropTypes.bool,
   action: PropTypes.oneOfType([

@@ -24,23 +24,13 @@ import Icon from "@mui/material/Icon";
 import SoftBox from "components/atoms/SoftBox";
 import SoftTypography from "components/atoms/SoftTypography";
 
-function DefaultNavbarLink({
-  name,
-  openHandler,
-  closeHandler,
-  children,
-  collapseStatus,
-  light,
-  ...rest
-}) {
+function DefaultNavbarItem({ name, light, ...rest }) {
   return (
     <>
       <SoftBox
         {...rest}
         mx={1}
         p={1}
-        onMouseEnter={children ? undefined : openHandler}
-        onMouseLeave={children ? undefined : closeHandler}
         display="flex"
         alignItems="baseline"
         color={light ? "white" : "dark"}
@@ -55,21 +45,13 @@ function DefaultNavbarLink({
         >
           {name}
         </SoftTypography>
-        <SoftTypography variant="body2" color={light ? "white" : "dark"}>
-          <Icon sx={{ fontWeight: "bold", verticalAlign: "middle" }}>keyboard_arrow_down</Icon>
-        </SoftTypography>
       </SoftBox>
-      {children && (
-        <Collapse in={Boolean(collapseStatus)} timeout="auto" unmountOnExit>
-          {children}
-        </Collapse>
-      )}
     </>
   );
 }
 
 // Setting default values for the props of DefaultNavbarLink
-DefaultNavbarLink.defaultProps = {
+DefaultNavbarItem.defaultProps = {
   openHandler: false,
   closeHandler: false,
   children: false,
@@ -78,7 +60,7 @@ DefaultNavbarLink.defaultProps = {
 };
 
 // Typechecking props for the DefaultNavbarLink
-DefaultNavbarLink.propTypes = {
+DefaultNavbarItem.propTypes = {
   name: PropTypes.string.isRequired,
   openHandler: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
   closeHandler: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
@@ -87,4 +69,4 @@ DefaultNavbarLink.propTypes = {
   light: PropTypes.bool,
 };
 
-export default DefaultNavbarLink;
+export default DefaultNavbarItem;

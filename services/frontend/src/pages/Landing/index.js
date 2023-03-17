@@ -27,6 +27,7 @@ const curved9 = require("assets/images/curved9.jpg");
 
 // Authentication layout components
 import AuthCoverLayout from "components/organisms/LayoutContainers/CoverLayout/AuthCoverLayout";
+import Header from "./Header";
 
 // Redux
 import { useDispatch } from "react-redux";
@@ -43,13 +44,18 @@ function getStepContent(stepIndex) {
   switch (stepIndex) {
     case 0:
       return {
+        title: "Invest Locally, Impact Globally!",
+        description: "Enter your email for a one time login code",
+      };
+    case 1:
+      return {
         title: "Welcome",
         description: "Enter your email for a one time login code",
         placeholder: "Email",
         buttonText: "Send Link",
         validationFunction: validateEmail,
       };
-    case 1:
+    case 2:
       return {
         title: "Almost There",
         description: "Input the one-time login code that you received.",
@@ -62,9 +68,9 @@ function getStepContent(stepIndex) {
   }
 }
 
-export default function Landing() {
+export default function Landing({ activeStepProp = 0 }) {
   const [value, setValue] = useState("");
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = useState(activeStepProp);
   const [error, setError] = useState(undefined);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -75,13 +81,15 @@ export default function Landing() {
   const [verifyCode, { isSuccess: isSuccessCode, isError: isErrorCode, error: errorCode }] =
     useVerifyCodeMutation();
 
-  const canSend = getStepContent(activeStep).validationFunction(value);
+  const canSend = activeStep > 0 && getStepContent(activeStep).validationFunction(value);
   const onChangeValue = (e) => setValue(e.target.value);
   const onClickConfirm = async () => {
     switch (activeStep) {
       case 0:
-        return await sendLink({ email: value, type: "INVESTOR" });
+        break;
       case 1:
+        return await sendLink({ email: value, type: "INVESTOR" });
+      case 2:
         const user = await verifyCode({ code: value }).unwrap();
         dispatch(setCredentials(user));
       default:
@@ -91,15 +99,14 @@ export default function Landing() {
 
   useEffect(() => {
     switch (activeStep) {
-      case 0:
+      case 1:
         if (isSuccessEmail) {
           setActiveStep(1);
           setValue("");
           setError(undefined);
         }
-
         break;
-      case 1:
+      case 2:
         if (isSuccessCode) {
           navigate("/open-communities");
         }
@@ -123,41 +130,63 @@ export default function Landing() {
 
   return (
     <AuthCoverLayout
+      header={
+        activeStep === 0 ? (
+          <Header
+            onSignup={() => {
+              setActiveStep(1);
+            }}
+          />
+        ) : (
+          false
+        )
+      }
       title={getStepContent(activeStep).title}
       description={getStepContent(activeStep).description}
       image={curved9}
     >
-      <SoftBox display="flex" flexDirection="row" justifyContent="space-between">
-        <SoftBox flexGrow={3} mr={1}>
-          <SoftInput
-            type="email"
-            placeholder={getStepContent(activeStep).placeholder}
-            name="email"
-            onChange={onChangeValue}
-            error={value.length > 0 ? !canSend : null}
-            success={value.length > 0 ? canSend : null}
-            value={value}
-          />
-        </SoftBox>
-        <SoftBox flexGrow={1}>
-          <SoftButton variant="gradient" color="info" onClick={onClickConfirm} disabled={!canSend}>
-            {getStepContent(activeStep).buttonText}
-          </SoftButton>
-        </SoftBox>
-      </SoftBox>
-      <SoftBox mt={2} mb={2} textAlign="center" marginRight={"184px"}>
-        <h6
-          style={{
-            fontSize: ".7em",
-            color: "red",
-            textAlign: "center",
-            fontWeight: 400,
-            transition: ".2s all",
-          }}
-        >
-          {error}
-        </h6>
-      </SoftBox>
+      {activeStep > 0 ? (
+        <>
+          <SoftBox display="flex" flexDirection="row" justifyContent="space-between">
+            <SoftBox flexGrow={3} mr={1}>
+              <SoftInput
+                type="email"
+                placeholder={getStepContent(activeStep).placeholder}
+                name="email"
+                onChange={onChangeValue}
+                error={value.length > 0 ? !canSend : null}
+                success={value.length > 0 ? canSend : null}
+                value={value}
+              />
+            </SoftBox>
+            <SoftBox flexGrow={1}>
+              <SoftButton
+                variant="gradient"
+                color="info"
+                onClick={onClickConfirm}
+                disabled={!canSend}
+              >
+                {getStepContent(activeStep).buttonText}
+              </SoftButton>
+            </SoftBox>
+          </SoftBox>
+          <SoftBox mt={2} mb={2} textAlign="center" marginRight={"184px"}>
+            <h6
+              style={{
+                fontSize: ".7em",
+                color: "red",
+                textAlign: "center",
+                fontWeight: 400,
+                transition: ".2s all",
+              }}
+            >
+              {error}
+            </h6>
+          </SoftBox>
+        </>
+      ) : (
+        <></>
+      )}
     </AuthCoverLayout>
   );
 }

@@ -1,5 +1,4 @@
 import React from "react";
-
 import DappkitReactProvider from "../lib/DappkitReactProvider";
 import { chainDict } from "../constants/networks";
 import { dappConfig } from "../config";

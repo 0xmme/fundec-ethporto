@@ -7,7 +7,7 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
 // Soft UI Dashboard PRO React components
-import SuiBox from "components/atoms/SoftBox";
+import SoftBox from "components/atoms/SoftBox";
 import SelectDefault from "components/molecules/InputFields/SelectDefault";
 import InputDefault from "components/molecules/InputFields/InputDefault";
 import DatePickerDefault from "components/molecules/InputFields/DatePickerDefault";
@@ -43,7 +43,7 @@ function NewCampaign({
   const onOwnerAddressChange = (e) => setOwnerAddress(e.target.value);
 
   return (
-    <SuiBox mt={0} mb={4}>
+    <SoftBox mt={0} mb={4}>
       <Typography id="modal-modal-title" variant="h4" component="h4">
         New Campaign
       </Typography>
@@ -125,7 +125,7 @@ function NewCampaign({
           </>
         ) : (
           <Grid item xs={12}>
-            <SuiBox mt={2} mb={2} textAlign="center">
+            <SoftBox mt={2} mb={2} textAlign="center">
               <h6
                 style={{
                   fontSize: ".7em",
@@ -137,11 +137,11 @@ function NewCampaign({
               >
                 {"Not Available"}
               </h6>
-            </SuiBox>
+            </SoftBox>
           </Grid>
         )}
       </Grid>
-    </SuiBox>
+    </SoftBox>
   );
 }
 

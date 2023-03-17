@@ -11,7 +11,8 @@ export default function Router() {
     <Routes>
       <Route path="/" element={<Outlet />}>
         {/************** Public routes ***************/}
-        <Route index element={<Landing />} />
+        <Route path="signin" element={<Landing activeStepProp={1} />} />
+        <Route index element={<Landing activeStepProp={0} />} />
         {/************** Protected Routes ***************/}
         <Route path="open-campaigns" element={<ListCampaigns />} />
       </Route>

@@ -32,16 +32,6 @@ export const campaignsApiSlice = apiSlice.injectEndpoints({
         } else return [{ type: "Campaign", id: "LIST" }];
       },
     }),
-    addNewCampaign: builder.mutation({
-      query: (campaign) => ({
-        url: "/campaigns/",
-        method: "POST",
-        body: {
-          ...campaign,
-        },
-      }),
-      invalidatesTags: [{ type: "Campaign", id: "LIST" }],
-    }),
   }),
 });
 

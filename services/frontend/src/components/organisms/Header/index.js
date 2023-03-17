@@ -26,7 +26,7 @@ import Tab from "@mui/material/Tab";
 import SoftBox from "components/atoms/SoftBox";
 import SoftTypography from "components/atoms/SoftTypography";
 import SoftButton from "components/atoms/SoftButton";
-import DashboardNavbar from "components/organisms/Navbars/DashboardNavbar";
+import DashboardNavbar from "components/molecules/Navbars/DashboardNavbar";
 import breakpoints from "assets/theme/base/breakpoints";
 
 // Images

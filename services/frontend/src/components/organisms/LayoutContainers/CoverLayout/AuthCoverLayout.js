@@ -25,7 +25,7 @@ import SoftTypography from "components/atoms/SoftTypography";
 
 // Soft UI Dashboard PRO React example components
 import PageLayout from "components/organisms/LayoutContainers/PageLayout";
-import DefaultNavbar from "components/organisms/Navbars/DefaultNavbar";
+import DefaultNavbar from "../../../molecules/Navbars/DefaultNavbar";
 
 // Authentication layout components
 import AuthFooter from "components/molecules/Footer/AuthFooter";
@@ -36,8 +36,8 @@ function AuthCoverLayout({ color, header, title, description, image, top, childr
       <DefaultNavbar
         action={{
           type: "external",
-          route: "https://appseed.us/product/soft-ui-dashboard-pro/full-stack/",
-          label: "download",
+          route: "/signin",
+          label: "Sign In",
         }}
       />
       <Grid

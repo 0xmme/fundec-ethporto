@@ -4,8 +4,8 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "App";
 
-// Moralis
-import { MoralisProvider } from "react-moralis";
+// Dappkit
+import { DappkitProviderCtx, defaulDappkitProvider } from "context/DappkitProviderCtx";
 
 // Redux
 import { Provider } from "react-redux";
@@ -21,12 +21,12 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <BrowserRouter>
-    <MoralisProvider initializeOnMount={false}>
+    <DappkitProviderCtx.Provider value={defaulDappkitProvider}>
       <SoftUIControllerProvider>
         <Provider store={store}>
           <App />
         </Provider>
       </SoftUIControllerProvider>
-    </MoralisProvider>
+    </DappkitProviderCtx.Provider>
   </BrowserRouter>
 );

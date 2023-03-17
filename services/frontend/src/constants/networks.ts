@@ -8,12 +8,12 @@ enum ChainName {
 }
 
 export enum ChainId {
-  LOCAL = 1337,
-  ETHEREUM = 1, 
+  LOCAL = 31337,
+  ETHEREUM = 1,
   RINKEBY = 4,
   GOERLI = 5,
   POLYGON = 137,
-  MUMBAI = 80001
+  MUMBAI = 80001,
 }
 
 export interface Chain {

@@ -37,7 +37,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 // Redux
 import { useSelector } from "react-redux";
-import { useGetCampaignsQuery, useAddNewCampaignMutation } from "state/campaigns/campaignsApiSlice";
+import { useGetCampaignsQuery } from "state/campaigns/campaignsApiSlice";
 import { selectCurrentUser } from "state/auth/authSlice";
 
 function ListCampaigns() {
@@ -94,7 +94,6 @@ function ListCampaigns() {
     activationDate < expirationDate &&
     activationDate > new Date();
 
-  const [addNewCampaign] = useAddNewCampaignMutation();
   const onNewCommunity = async () => {
     handleCloseModal();
     const id = toast.loading("Please wait...");
@@ -111,8 +110,7 @@ function ListCampaigns() {
         name,
         owner_address: ownerAddress,
       };
-      console.log(payload);
-      await addNewCampaign(payload).unwrap();
+
       toast.update(id, {
         render: "All is good",
         type: toast.TYPE.SUCCESS,
