@@ -9,6 +9,8 @@ The project aims to create a platform that enables individuals to invest in sust
 
 By lending capital, individuals earn a return on their investment, as the platform will offer competitive interest rates to investors. It also helps in reducing the carbon footprint and support the growth of the green economy.
 
+![Alt Text](https://gateway.ipfs.io/ipfs/bafybeihj3quqv2x3lzgmg4ppxlsia6j4jf2hnwed56y6yn6vvjgjuam3oq)
+
 ## Problem
 
 We see several problems in the world related to sustainable energy growth:
