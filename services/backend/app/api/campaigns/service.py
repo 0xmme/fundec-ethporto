@@ -60,3 +60,18 @@ async def read_new_campaign() -> str:
 
     address_list = crowdfund_factory.functions.getAllCampaigns().call()
     return address_list[len(address_list) - 1]
+
+
+async def read_all_campaigns() -> str:
+    web3 = Web3(Web3.HTTPProvider(rpc_url))
+
+
+    path = (
+        Path(__file__).parent / "../../abis/CrowdlendFactory.json"
+    )
+    # create contract instance
+    crowdfund_factory_abi = json.load(open(path, "r"))["abi"]
+    crowdfund_factory = web3.eth.contract(contract_address, abi=crowdfund_factory_abi)
+
+    address_list = crowdfund_factory.functions.getAllCampaigns().call()
+    return address_list

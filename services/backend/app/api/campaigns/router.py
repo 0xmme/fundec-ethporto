@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from app.db import get_db
 from . import crud
 from .schemas import CampaignPayloadSchema, CampaignResponseSchema
-from .service import read_new_campaign
+from .service import read_new_campaign, read_all_campaigns
 
 router = APIRouter()
 
@@ -31,7 +31,13 @@ async def get_all_campaigns(
     db: Session = Depends(get_db),
 ) -> response_model:
     campaigns = await crud.read_all_campaigns(db)
+    web3_campaigns = await read_all_campaigns()
 
+    result = [obj for obj in campaigns if obj.deposit_address not in web3_campaigns]
+    for campaign in result:
+        await crud.delete_campaign_by_id(campaign.id, db)
+
+    campaigns = await crud.read_all_campaigns(db)
     return campaigns
 
 # /----- GET --------------------------------------------------------------------------

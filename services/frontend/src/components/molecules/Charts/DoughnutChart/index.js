@@ -26,6 +26,7 @@ import Card from "@mui/material/Card";
 // Soft UI Dashboard PRO React components
 import SoftBox from "components/atoms/SoftBox";
 import SoftTypography from "components/atoms/SoftTypography";
+import SoftBadgeDot from "components/atoms/SoftBadgeDot";
 
 // DoughnutChart configurations
 import configs from "components/molecules/Charts/DoughnutChart/configs";
@@ -34,6 +35,26 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 function DoughnutChart({ title, description, height, chart, value }) {
   const { data, options } = configs(chart.labels || [], chart.datasets || {}, chart.cutout);
+
+  const renderBadgeDots = chart.labels
+    ? chart.labels.map((label, index) => {
+        const badgeDotKey = `badge-dot-${index}`;
+
+        return (
+          <SoftBadgeDot
+            key={badgeDotKey}
+            variant="gradient"
+            color={
+              chart.datasets.backgroundColors ? chart.datasets.backgroundColors[index] : "info"
+            }
+            size="lg"
+            badgeContent={label}
+            font={{ color: "text", weight: "medium" }}
+            px={0}
+          />
+        );
+      })
+    : null;
 
   const renderChart = (
     <SoftBox p={2}>
@@ -51,7 +72,7 @@ function DoughnutChart({ title, description, height, chart, value }) {
           </SoftBox>
         </SoftBox>
       ) : null}
-      <SoftBox height={height} position="relative">
+      <SoftBox height={height} position="relative" marginRight="8rem">
         <SoftBox
           position="absolute"
           top="50%"
@@ -68,6 +89,18 @@ function DoughnutChart({ title, description, height, chart, value }) {
           </SoftBox>
         </SoftBox>
         <Doughnut data={data} options={options} />
+        <SoftBox
+          position="absolute"
+          top="50%"
+          left="120%"
+          sx={{ transform: "translate(-50%, -50%) !important" }}
+          display="flex"
+          flexDirection="row"
+        >
+          <SoftBox display="flex" flexDirection="column" mt={2}>
+            {renderBadgeDots}
+          </SoftBox>
+        </SoftBox>
       </SoftBox>
     </SoftBox>
   );

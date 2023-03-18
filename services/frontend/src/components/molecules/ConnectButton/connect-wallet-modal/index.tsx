@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, ModalFooter, Button } from "@taikai/rocket-kit";
 
 import { useWeb3 } from "../../../../hooks/useWeb3";
 import { ConnectorList, Warning, Connector, Alert, Agreement, AddressStyle } from "./styles";
 import useAddress from "../../../../hooks/useAddress";
 import useMetaMaskOnboarding from "../../../../hooks/useMetaMaskOnboarding";
+
+// Redux
+import { useDispatch } from "react-redux";
+import { setAddress } from "../../../../state/connection/connectionSlice";
 
 type OnCloseFunctionType = () => void;
 
@@ -14,6 +18,12 @@ interface Props {
 
 const ShowEthAddress = () => {
   const { address = "" } = useAddress();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setAddress({ address: address }));
+  }, [address, dispatch]);
+
   return <AddressStyle>{address}</AddressStyle>;
 };
 

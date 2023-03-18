@@ -24,7 +24,7 @@ import SoftInput from "components/atoms/SoftInput";
 import SoftButton from "components/atoms/SoftButton";
 
 // Images
-const curved9 = require("assets/images/fundec-cover.png");
+const curved9 = require("assets/images/curved9.jpg");
 
 // Authentication layout components
 import AuthCoverLayout from "components/organisms/LayoutContainers/CoverLayout/AuthCoverLayout";
@@ -79,10 +79,6 @@ export default function Landing({ activeStepProp = 0 }) {
   const [activeStep, setActiveStep] = useState(activeStepProp);
   const [error, setError] = useState(undefined);
 
-  const [inputError, setInputError] = useState(undefined);
-  const [inputSuccess, setInputSuccess] = useState(undefined);
-  const [inputValue, setInputValue] = useState(undefined);
-
   const [
     sendCode,
     { isSuccess: isSuccessSend, isLoading: isLoadingSend, isError: isErrorSend, error: errorSend },
@@ -91,34 +87,21 @@ export default function Landing({ activeStepProp = 0 }) {
   const [verifyCode, { isSuccess: isSuccessVerify, isError: isErrorVerify, error: errorVerify }] =
     useVerifyCodeMutation();
 
-  const canSend =
-    (activeStep === 1 && getStepContent(activeStep).validationFunction(email)) ||
-    (activeStep === 2 && getStepContent(activeStep).validationFunction(code)) ||
-    isLoadingSend;
-  const onChangeValue = (e) => {
-    const value = e.target.value;
-    switch (activeStep) {
-      case 1:
-        setInputError(email.length > 0 ? !canSend : null);
-        setInputSuccess(email.length > 0 ? canSend : null);
-        setInputValue(value);
-        return setEmail(value);
-      case 2:
-        setInputError(code.length > 0 ? !canSend : null);
-        setInputSuccess(code.length > 0 ? canSend : null);
-        setInputValue(value);
-        return setCode(value);
-      default:
-        return;
-    }
-  };
+  const onChangeEmail = (e) => setEmail(e.target.value);
+  const onChangeCode = (e) => setCode(e.target.value);
+
+  const canSendEmail =
+    !isLoadingSend && activeStep === 1 && getStepContent(activeStep)?.validationFunction(email);
+  const canSendCode =
+    !isLoadingSend && activeStep === 2 && getStepContent(activeStep)?.validationFunction(code);
 
   const onClickConfirm = async () => {
     switch (activeStep) {
       case 0:
         break;
       case 1:
-        return await sendCode({ email });
+        await sendCode({ email });
+        break;
       case 2:
         const user = await verifyCode({ email, code }).unwrap();
         dispatch(setCredentials(user));
@@ -132,7 +115,6 @@ export default function Landing({ activeStepProp = 0 }) {
       case 1:
         if (isSuccessSend) {
           setActiveStep(2);
-          setError(undefined);
         }
         break;
       case 2:
@@ -178,22 +160,34 @@ export default function Landing({ activeStepProp = 0 }) {
         <>
           <SoftBox display="flex" flexDirection="row" justifyContent="space-between">
             <SoftBox flexGrow={3} mr={1}>
-              <SoftInput
-                type="email"
-                placeholder={getStepContent(activeStep).placeholder}
-                name="email"
-                onChange={onChangeValue}
-                error={inputError}
-                success={inputSuccess}
-                defvalue={inputValue}
-              />
+              {activeStep === 1 ? (
+                <SoftInput
+                  type="email"
+                  placeholder={getStepContent(activeStep).placeholder}
+                  name="email"
+                  onChange={onChangeEmail}
+                  error={email.length > 0 ? !canSendEmail : null}
+                  success={email.length > 0 ? canSendEmail : null}
+                  defaultValue=""
+                />
+              ) : (
+                <SoftInput
+                  type="text"
+                  placeholder={getStepContent(activeStep).placeholder}
+                  name="code"
+                  onChange={onChangeCode}
+                  error={code.length > 0 ? !canSendCode : null}
+                  success={code.length > 0 ? canSendCode : null}
+                  defaultValue=""
+                />
+              )}
             </SoftBox>
             <SoftBox flexGrow={1}>
               <SoftButton
                 variant="gradient"
                 color="info"
                 onClick={onClickConfirm}
-                disabled={!canSend}
+                disabled={activeStep === 1 ? !canSendEmail : !canSendCode}
               >
                 {getStepContent(activeStep).buttonText}
               </SoftButton>

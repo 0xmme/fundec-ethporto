@@ -26,6 +26,7 @@ contract Crowdlend is Ownable {
     IERC20 public immutable token;
     Campaign public campaign;
     mapping(address => uint) public pledgedAmount;
+    uint public totalPledgedAmount;
     CampaignState public state;
 
     //----------------- EVENTS ------------------
@@ -85,6 +86,7 @@ contract Crowdlend is Ownable {
         token.transferFrom(msg.sender, address(this), _amount);
         campaign.pledged += _amount;
         pledgedAmount[msg.sender] += _amount;
+        totalPledgedAmount += _amount;
 
         emit Pledge(msg.sender, _amount);
     }
@@ -122,6 +124,7 @@ contract Crowdlend is Ownable {
         token.transferFrom(address(this), msg.sender, _amount);
         campaign.pledged -= _amount;
         pledgedAmount[msg.sender] -= _amount;
+        totalPledgedAmount -= _amount;
 
         emit Unpledge(msg.sender, _amount);
     }

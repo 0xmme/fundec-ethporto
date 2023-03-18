@@ -34,8 +34,8 @@ async def read_all_campaigns(db: Session):
 # /----- UPDATE --------------------------------------------------------------------------
 
 # ------ DELETE --------------------------------------------------------------------------
-async def delete_campaign_by_id(campaign_id: int, db: Session) -> int:
-    campaign_query = db.query(Campaign).filter(Campaign.id == campaign_id)
+async def delete_campaign_by_id(id: int, db: Session) -> int:
+    campaign_query = db.query(Campaign).filter(Campaign.id == id)
 
     if campaign_query.first() is None:
         return None

@@ -38,23 +38,25 @@ import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
 import { useGetCampaignsQuery, useCreate } from "state/campaigns/campaignsApiSlice";
 import { selectUser } from "state/auth/authSlice";
+import { selectAddress } from "../../../state/connection/connectionSlice";
+import { useAddNewCampaignMutation } from "../../../state/campaigns/campaignsApiSlice";
 
 // dappKit
 import { Model } from "@taikai/dappkit";
 import { Web3Connection } from "@taikai/dappkit";
-import useAddress from "hooks/useAddress";
 
 // abi
 import CrowndlendFactory from "abis/CrowdlendFactory.json";
-import { useAddNewCampaignMutation } from "../../../state/campaigns/campaignsApiSlice";
 
 function ListCampaigns() {
   const user = useSelector(selectUser);
-  const { address: ownerAddress = "" } = useAddress();
+  const ownerAddress = useSelector(selectAddress);
 
   // READ campaigns
   const { data: campaigns, isSuccess } = useGetCampaignsQuery(undefined, {
+    pollingInterval: 60000,
     refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
   });
 
   // Modals
@@ -116,7 +118,6 @@ function ListCampaigns() {
       await CrowndlendFactoryModel.start();
 
       // Change a value on the contract
-      console.log(ownerAddress);
       const receipt = await CrowndlendFactoryModel.sendTx(
         CrowndlendFactoryModel.contract.methods.createCampaign(
           ownerAddress,
@@ -170,17 +171,19 @@ function ListCampaigns() {
               campaigns.ids.map((id) => {
                 const campaign = campaigns.entities[id];
 
-                console.log(campaign);
                 const cardProps = {
                   title: campaign.name,
                   location: campaign.address,
                   description,
                   apy: campaign.apy,
-                  startDate: DateTime.fromISO(campaign.activation_date).toFormat("yyyy-MM-dd"),
-                  endDate: DateTime.fromISO(campaign.expiration_date).toFormat("yyyy-MM-dd"),
+                  asset: campaign.asset,
+                  startDate: campaign.activation_date,
+                  endDate: campaign.expiration_date,
+                  ownerAddress: campaign.owner_address,
+                  contractAddress: campaign.deposit_address,
                 };
                 return (
-                  <Grid item xs={12} md={6} lg={4}>
+                  <Grid key={id} item xs={12} md={6} lg={4}>
                     <CampaignCard {...cardProps} />
                   </Grid>
                 );

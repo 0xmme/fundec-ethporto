@@ -90,7 +90,7 @@ function AuthCoverLayout({ color, header, title, description, image, top, childr
               sx={{
                 backgroundImage: `url(${image})`,
                 backgroundSize: "cover",
-                transform: "skewX(10deg)",
+                objectFit: "cover;",
               }}
             />
           </SoftBox>

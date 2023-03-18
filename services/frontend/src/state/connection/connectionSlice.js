@@ -3,12 +3,17 @@ import { createSlice } from "@reduxjs/toolkit";
 const connectionSlice = createSlice({
   name: "connection",
   initialState: {
+    address: "",
     isConnectModalOpen: false,
     web3Status: "disconnected",
     chainId: undefined,
     signingMessage: "",
   },
   reducers: {
+    setAddress: (state, action) => {
+      const { address } = action.payload;
+      state.address = address;
+    },
     setIsConnectModalOpen: (state, action) => {
       state.isConnectModalOpen = !state.isConnectModalOpen;
     },
@@ -27,8 +32,9 @@ const connectionSlice = createSlice({
   },
 });
 
-export const { setIsConnectModalOpen, setChainId, setSingningMessage, setWeb3Status } =
+export const { setAddress, setIsConnectModalOpen, setChainId, setSingningMessage, setWeb3Status } =
   connectionSlice.actions;
 
 export default connectionSlice.reducer;
+export const selectAddress = (state) => state.connection.address;
 export const selectConnection = (state) => state.connection;

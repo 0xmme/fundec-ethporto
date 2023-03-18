@@ -1,23 +1,100 @@
-import { useEffect } from "react";
-
+import { useState, useEffect } from "react";
+import console from "console-browserify";
 // Soft UI Dashboard PRO React components
 import SoftBox from "components/atoms/SoftBox";
 import SoftTypography from "components/atoms/SoftTypography";
 import FormField from "components/molecules/InputFields/InputDefault";
 import SoftButton from "components/atoms/SoftButton";
 
+// redux
+import { useSelector } from "react-redux";
+import { selectAddress } from "../../../../state/connection/connectionSlice";
+
 // dappKit
-import useAddress from "hooks/useAddress";
+import { Model } from "@taikai/dappkit";
+import { Web3Connection } from "@taikai/dappkit";
 
-function LendForm({}) {
-  const { address: ownerAddress = "" } = useAddress();
+// abi
+import Crowndlend from "abis/Crowdlend.json";
+import MockToken from "abis/MockToken.json";
 
-  useEffect(() => {}, [ownerAddress]);
-  if (ownerAddress?.length > 0) {
+function LendForm({ asset, contractAddress }) {
+  const address = useSelector(selectAddress);
+  const [pledgedAmount, setPledgedAmount] = useState(null);
+  const [amount, setAmount] = useState(0);
+
+  const pledge = async () => {
+    // Provide the custom provider to Web3Connection
+    const web3Connection = new Web3Connection({ web3Host: "http://localhost:8545" });
+    web3Connection.start();
+    await web3Connection.connect();
+
+    const CrowndlendModel = new Model(web3Connection, Crowndlend.abi, contractAddress);
+
+    await CrowndlendModel.start();
+
+    // Change a value on the contract
+    const receipt = await CrowndlendModel.sendTx(CrowndlendModel.contract.methods.pledge(amount));
+  };
+
+  const onChangeAmount = (e) => setAmount(e.target.value);
+  const onClickPledge = async () => {
+    await increaseAllowance();
+    await pledge();
+    await fetchData();
+  };
+
+  const increaseAllowance = async () => {
+    // Provide the custom provider to Web3Connection
+    const web3Connection = new Web3Connection({ web3Host: "http://localhost:8545" });
+    web3Connection.start();
+    await web3Connection.connect();
+
+    const MockTokenModel = new Model(
+      web3Connection,
+      MockToken.abi,
+      "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+    );
+
+    await MockTokenModel.start();
+
+    // Change a value on the contract
+    const receipt = await MockTokenModel.sendTx(
+      MockTokenModel.contract.methods.increaseAllowance(contractAddress, amount)
+    );
+  };
+
+  const fetchData = async () => {
+    if (address?.length > 0) {
+      // Provide the custom provider to Web3Connection
+      const web3Connection = new Web3Connection({ web3Host: "http://localhost:8545" });
+      web3Connection.start();
+      await web3Connection.connect();
+
+      const CrowndlendModel = new Model(web3Connection, Crowndlend.abi, contractAddress);
+
+      await CrowndlendModel.start();
+      const receipt = await CrowndlendModel.callTx(
+        CrowndlendModel.contract.methods.pledgedAmount(address)
+      );
+      setPledgedAmount(receipt);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [address]);
+
+  if (address?.length > 0) {
     return (
       <>
         <SoftBox display="flex" flexDirection="column">
-          <FormField type="number" label="Stake Amount" defaultValue={2} />
+          <FormField
+            type="number"
+            label="Stake Amount"
+            defaultValue={0}
+            onChange={onChangeAmount}
+          />
           <SoftBox display="flex" flexDirection="row" justifyContent="space-between" pt={2}>
             <SoftTypography
               variant="h6"
@@ -26,24 +103,10 @@ function LendForm({}) {
               marginBottom="auto"
               marginTop="auto"
             >
-              Currently Staking
+              Currently Pledged
             </SoftTypography>
             <SoftTypography variant="h4" color="text" fontWeight="medium" textAlign="right">
-              5 EWT
-            </SoftTypography>
-          </SoftBox>
-          <SoftBox display="flex" flexDirection="row" justifyContent="space-between" pt={2}>
-            <SoftTypography
-              variant="h6"
-              color="text"
-              fontWeight="medium"
-              marginBottom="auto"
-              marginTop="auto"
-            >
-              Earned Rewards
-            </SoftTypography>
-            <SoftTypography variant="h4" color="text" fontWeight="medium" textAlign="right">
-              1 EWT
+              {pledgedAmount ?? "NAN"} {asset}
             </SoftTypography>
           </SoftBox>
         </SoftBox>
@@ -51,7 +114,7 @@ function LendForm({}) {
           <SoftButton variant="gradient" color="light" ml={5}>
             Unpledge
           </SoftButton>
-          <SoftButton variant="gradient" color="info">
+          <SoftButton variant="gradient" color="info" onClick={onClickPledge}>
             Pledge
           </SoftButton>
         </SoftBox>
@@ -62,7 +125,7 @@ function LendForm({}) {
   return (
     <SoftBox>
       <SoftBox display="flex" flexDirection="column">
-        <FormField type="number" label="Stake Amount" defaultValue={0} disabled />
+        <FormField type="number" label="Pledge Amount" defaultValue={0} disabled />
         <SoftBox display="flex" flexDirection="row" justifyContent="space-between" pt={2}>
           <SoftTypography
             variant="h6"
@@ -71,21 +134,7 @@ function LendForm({}) {
             marginBottom="auto"
             marginTop="auto"
           >
-            Currently Staking
-          </SoftTypography>
-          <SoftTypography variant="h4" color="text" fontWeight="medium" textAlign="right">
-            {""}
-          </SoftTypography>
-        </SoftBox>
-        <SoftBox display="flex" flexDirection="row" justifyContent="space-between" pt={2}>
-          <SoftTypography
-            variant="h6"
-            color="text"
-            fontWeight="medium"
-            marginBottom="auto"
-            marginTop="auto"
-          >
-            Earned Rewards
+            Currently Pledging
           </SoftTypography>
           <SoftTypography variant="h4" color="text" fontWeight="medium" textAlign="right">
             {""}
