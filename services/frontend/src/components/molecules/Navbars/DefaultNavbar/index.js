@@ -114,7 +114,7 @@ function DefaultNavbar({ transparent, light, action }) {
             name="Community"
             light={light}
             onClick={() => {
-              window.open("https://vcegi07.inesctec.pt/communities", "_blank")
+              window.open("https://vcegi07.inesctec.pt/communities", "_blank");
             }}
           />
           <DefaultNavbarItem name="Create Campaign" light={light} />

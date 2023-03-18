@@ -31,14 +31,8 @@ function AuthFooter() {
         <Grid item xs={10} lg={8}>
           <SoftBox display="flex" justifyContent="center" flexWrap="wrap" mb={3}>
             <SoftBox mr={{ xs: 2, lg: 3, xl: 1 }}>
-              <SoftTypography
-                component="a"
-                href="https://appseed.us/full-stack/react-soft-dashboard"
-                target="_blank"
-                variant="body2"
-                color="secondary"
-              >
-                INESC TEC
+              <SoftTypography component="a" href="/" variant="body2" color="secondary">
+                Fund ECO
               </SoftTypography>
             </SoftBox>
           </SoftBox>
@@ -49,13 +43,13 @@ function AuthFooter() {
               {/* <InstagramIcon fontSize="small" /> */}
             </SoftBox>
             <SoftBox color="secondary">
-              <LinkedInIcon href="https://www.linkedin.com/company/inesc-tec/" fontSize="small" />
+              <LinkedInIcon href="https://www.linkedin.com/" fontSize="small" />
             </SoftBox>
           </SoftBox>
         </Grid>
         <Grid item xs={12} lg={8} className="text-center">
           <SoftTypography variant="body2" color="secondary">
-            &copy; INESC TEC - Todos os direitos Reservados 2023.
+            &copy; Fund ECO - All rights reserved 2023.
           </SoftTypography>
         </Grid>
       </Grid>

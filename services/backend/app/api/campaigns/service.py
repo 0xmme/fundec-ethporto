@@ -5,11 +5,8 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from web3 import Web3
 
-rpc_url="http://evm-contracts:8545"
-contract_address="0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
-public_key="0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
-private_key="0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d"
-mock_erc20_address='0x5FbDB2315678afecb367f032d93F642f64180aa3'
+rpc_url="https://rpc.testnet.mantle.xyz"
+contract_address="0x5776E61132C879B39e6335846cdb9F55031CC9b1"
 
 async def create_new_campaign(owner_address: str) -> str:
     web3 = Web3(Web3.HTTPProvider(rpc_url))

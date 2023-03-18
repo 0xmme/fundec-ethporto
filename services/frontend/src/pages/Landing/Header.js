@@ -18,6 +18,9 @@ import SoftBox from "components/atoms/SoftBox";
 import SoftTypography from "components/atoms/SoftTypography";
 import SoftButton from "components/atoms/SoftButton";
 
+import sponsors from "assets/images/sponsors.png";
+import logo from "assets/images/logo.png";
+
 function Header({ onSignup }) {
   return (
     <SoftBox>
@@ -40,6 +43,36 @@ function Header({ onSignup }) {
           {"Learn More"}
         </SoftButton>
       </SoftBox>
+      <SoftBox display="flex" flexDirection="row" mt={8}>
+        <SoftTypography
+          variant="body1"
+          fontWeight="regular"
+          color="text"
+          sx={{ marginBottom: "auto", marginTop: "auto" }}
+        >
+          {"Powered By"}
+        </SoftTypography>
+        <SoftBox
+          component="img"
+          src={sponsors}
+          alt="background-image"
+          position="relative"
+          top={0}
+          left={0}
+          width="80%"
+          height="50%"
+        />
+      </SoftBox>
+      <SoftBox
+        component="img"
+        src={logo}
+        alt="background-image"
+        position="absolute"
+        top={"-70px"}
+        left={0}
+        width="13%"
+        height="27%"
+      />
     </SoftBox>
   );
 }

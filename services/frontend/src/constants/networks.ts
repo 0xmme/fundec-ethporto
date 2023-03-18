@@ -5,6 +5,7 @@ enum ChainName {
   GOERLI = "Goerli",
   POLYGON = "Polygon",
   MUMBAI = "Mumbai",
+  MANTLE = "Mantle",
 }
 
 export enum ChainId {
@@ -14,6 +15,7 @@ export enum ChainId {
   GOERLI = 5,
   POLYGON = 137,
   MUMBAI = 80001,
+  MANTLE = 5001,
 }
 
 export interface Chain {
@@ -52,6 +54,11 @@ export const chains: Chain[] = [
     id: ChainId.RINKEBY,
     name: ChainName.RINKEBY,
     rpc: "https://rpc.ankr.com/eth_rinkeby",
+  },
+  {
+    id: ChainId.MANTLE,
+    name: ChainName.MANTLE,
+    rpc: "https://rpc.testnet.mantle.xyz",
   },
 ];
 

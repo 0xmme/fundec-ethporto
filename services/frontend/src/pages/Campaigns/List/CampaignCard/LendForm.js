@@ -25,7 +25,7 @@ function LendForm({ asset, contractAddress }) {
 
   const pledge = async () => {
     // Provide the custom provider to Web3Connection
-    const web3Connection = new Web3Connection({ web3Host: "http://localhost:8545" });
+    const web3Connection = new Web3Connection({ web3Host: "https://rpc.testnet.mantle.xyz" });
     web3Connection.start();
     await web3Connection.connect();
 
@@ -46,14 +46,14 @@ function LendForm({ asset, contractAddress }) {
 
   const increaseAllowance = async () => {
     // Provide the custom provider to Web3Connection
-    const web3Connection = new Web3Connection({ web3Host: "http://localhost:8545" });
+    const web3Connection = new Web3Connection({ web3Host: "https://rpc.testnet.mantle.xyz" });
     web3Connection.start();
     await web3Connection.connect();
 
     const MockTokenModel = new Model(
       web3Connection,
       MockToken.abi,
-      "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+      "0xba2531Fe3D53b45991e5529Fb80a0Ae71C3c78CD"
     );
 
     await MockTokenModel.start();
@@ -67,7 +67,7 @@ function LendForm({ asset, contractAddress }) {
   const fetchData = async () => {
     if (address?.length > 0) {
       // Provide the custom provider to Web3Connection
-      const web3Connection = new Web3Connection({ web3Host: "http://localhost:8545" });
+      const web3Connection = new Web3Connection({ web3Host: "https://rpc.testnet.mantle.xyz" });
       web3Connection.start();
       await web3Connection.connect();
 

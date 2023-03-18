@@ -58,7 +58,7 @@ function CampaignCard({
   const fetchData = async () => {
     if (address?.length > 0) {
       // Provide the custom provider to Web3Connection
-      const web3Connection = new Web3Connection({ web3Host: "http://localhost:8545" });
+      const web3Connection = new Web3Connection({ web3Host: "https://rpc.testnet.mantle.xyz" });
       web3Connection.start();
       await web3Connection.connect();
 

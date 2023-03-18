@@ -85,8 +85,10 @@ function ListCampaigns() {
     isDemo,
     setIsDemo,
     setAsset,
+    asset,
     setApy,
     setGoal,
+    goal,
   };
   const onSave =
     [activationDate, expirationDate, asset, apy, goal].every(Boolean) &&
@@ -105,14 +107,14 @@ function ListCampaigns() {
     const id = toast.loading("Please wait...");
     try {
       // Provide the custom provider to Web3Connection
-      const web3Connection = new Web3Connection({ web3Host: "http://localhost:8545" });
+      const web3Connection = new Web3Connection({ web3Host: "https://rpc.testnet.mantle.xyz" });
       web3Connection.start();
       await web3Connection.connect();
 
       const CrowndlendFactoryModel = new Model(
         web3Connection,
         CrowndlendFactory.abi,
-        "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
+        "0x5776E61132C879B39e6335846cdb9F55031CC9b1"
       );
 
       await CrowndlendFactoryModel.start();
@@ -122,7 +124,7 @@ function ListCampaigns() {
         CrowndlendFactoryModel.contract.methods.createCampaign(
           ownerAddress,
           apy,
-          "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+          "0xba2531Fe3D53b45991e5529Fb80a0Ae71C3c78CD",
           goal,
           Math.floor(activationDate / 1000),
           Math.floor(expirationDate / 1000)
@@ -193,9 +195,8 @@ function ListCampaigns() {
         </SoftBox>
       </SoftBox>
       <SoftBox display="flex" flexDirection="column" mt="1rem" textAlign="justify">
-        <NoteItem label="Staked tokens can be withdrawn at any time" />
-        <NoteItem label="Hourly rewards will be compounded (added to the total stake and earn interest)" />
-        <NoteItem label="A small gas fee is charged for Stake and Unstake operations" />
+        <NoteItem label="Pledged tokens + APY can only be withdrawn after the campaigns end" />
+        <NoteItem label="A small gas fee is charged for Pledge and Unpledge operations" />
       </SoftBox>
       <ModalDefault
         open={openModal}

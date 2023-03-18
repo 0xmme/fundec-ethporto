@@ -7,6 +7,7 @@ from app.api.schemas import OrmBaseModel
 # ------ ENUMS --------------------------------------------------------------------------
 class AssetType(str, Enum):
     MCK = "MCK"
+    ECO = "ECO"
 
 class StatusType(str, Enum):
     open = "OPEN"
