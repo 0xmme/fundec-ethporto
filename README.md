@@ -26,7 +26,9 @@ The smart contracts used in Fund ECO provide the following:
 - Pledge/Unpledge tokens: Investors can pledge or unpledged tokens to the campaigns they want to support
 - Claim funds: Creators can claim the funds they have raised to invest in their sustainable projects
 - Claim pledged tokens with an APY:  Users can claim the pledged tokens they have contributed to a campaign with an Annual Percentage Yield(APY) provided by the campaign
-- Create a ERC20 token/Handle with ERC20 tokens(??)
+
+### User Flow
+![Alt Text](https://gateway.ipfs.io/ipfs/bafkreigm2j5cktpny3jgdb5dxs2rvlswaxaf2pepvoy7uxfvpsockozigy)
 
 ## Challenges we ran into
 
