@@ -43,6 +43,11 @@ Our team is proud of the significant achievements we made in building Fund ECO. 
 Despite the initial challenges we faced in familiarizing ourselves with the latest Web3 technologies, we are proud to have developed Fund ECO using newer web3 technolgies.  We learned that by asking for the right help, reading the documentation, and connecting with the sponsor teams, we were able to diligently build our way to a successful deployment. This experience will enable us to enhance our platform and build even more innovative and impactful solutions in the future.
 Our team worked tirelessly to deploy the smart contracts and integrate the front-end and back-end systems of FundECO within a tight timeframe. Through this process, we gained a deeper understanding of how to build robust and decentralized applications on the blockchain, and the immense utility that they can provide to users. Building FundECO has demonstrated to us the potential of blockchain technology as a powerful tool for enabling secure, transparent, and trustless transactions.
 
+## What's next for Fund ECO
+With the right funding the project could continue to build and do the following:
+1.	Conducting a market test and getting feedback from energy communities and sustainable energy investors. We plan to start with the energy communities in Europe and on-board attendees, but having a global reach it can reach millions.
+2.	Validate all assumptions and test in the field: Coordinate with different sustainable energy providers and research universities and their community and see how the solution would work and gather feedback to see what needs to be better. 
+3.	Bring on more team members.
 
 ____________________
 ## Setup
