@@ -1,5 +1,5 @@
 // Core
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import console from "console-browserify";
 
 // @mui material components
@@ -20,9 +20,14 @@ import SoftButton from "components/atoms/SoftButton";
 import { useSelector } from "react-redux";
 import { selectAddress } from "../../../../state/connection/connectionSlice";
 
+// dappKit
+import { Model } from "@taikai/dappkit";
+import { Web3Connection } from "@taikai/dappkit";
+
 // Others
 import ItemCard from "./ItemCard";
 import LendForm from "./LendForm";
+import Crowndlend from "abis/Crowdlend.json";
 
 function CampaignCard({
   title,
@@ -34,18 +39,39 @@ function CampaignCard({
   ownerAddress,
   asset,
   contractAddress,
+  goal,
 }) {
   const address = useSelector(selectAddress);
+  const [totalPledgedAmount, setTotalPledgedAmount] = useState(0);
   const data = {
-    labels: ["Pledged", "Goal"],
+    labels: ["Remaining", "Goal"],
     datasets: {
-      label: "Projects",
+      label: "Pledged Capital",
       backgroundColors: ["info", "dark"],
-      data: [75, 25],
+      data: [goal - totalPledgedAmount, goal],
     },
   };
   const isOwner = ownerAddress === address;
+
   const [openLendForm, setOpenLendForm] = useState(false);
+
+  const fetchData = async () => {
+    if (address?.length > 0) {
+      // Provide the custom provider to Web3Connection
+      const web3Connection = new Web3Connection({ web3Host: "http://localhost:8545" });
+      web3Connection.start();
+      await web3Connection.connect();
+
+      const CrowndlendModel = new Model(web3Connection, Crowndlend.abi, contractAddress);
+
+      await CrowndlendModel.start();
+      console.log(CrowndlendModel);
+      const receipt = await CrowndlendModel.callTx(
+        CrowndlendModel.contract.methods.totalPledgedAmount()
+      );
+      setTotalPledgedAmount(receipt);
+    }
+  };
 
   const isOwnerCTO = () => {
     const today = new Date();
@@ -61,6 +87,11 @@ function CampaignCard({
       return "HEY";
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, [address]);
+
   return (
     <Card>
       <SoftBox width="100%" py={2.5} px={4}>

@@ -181,6 +181,7 @@ function ListCampaigns() {
                   endDate: campaign.expiration_date,
                   ownerAddress: campaign.owner_address,
                   contractAddress: campaign.deposit_address,
+                  goal: campaign.goal,
                 };
                 return (
                   <Grid key={id} item xs={12} md={6} lg={4}>
