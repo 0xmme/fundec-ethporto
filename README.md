@@ -5,7 +5,7 @@
 ____________________
 Yield your capital and support sustainable development by investing in local Energy Communities!
 
-The project aims to create a platform that enables individuals to invest in renewable energy projects in their local areas. The platform is designed to facilitate crowdlending, which allows multiple investors to pool their money together to fund a project. 
+The project aims to create a platform that enables individuals to invest in sustainable energy projects globally and create energy communities in their local areas. The platform is designed to facilitate crowdlending, which allows multiple investors to pool their money together to fund a project. 
 
 By lending capital, individuals earn a return on their investment, as the platform will offer competitive interest rates to investors. It also helps in reducing the carbon footprint and support the growth of the green economy.
 ___________________
