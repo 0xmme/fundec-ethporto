@@ -12,7 +12,7 @@ ___________________
 ## Tech stack
 
 1.	Next.js, React, Redux, dappKit and rocketKit for building the dApp fronted 
-2.	(web3*.Storage* on IPFS stores community source images)
+2.	IPFS to store images of community members NFTs
 3.	EVM-compatible smart contracts written in Solidity provides business logic and trust for the platform
 4.	Sign-up/in with email mechanism for easy onboarding, especially for non-Web3 users
 
