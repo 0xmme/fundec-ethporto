@@ -16,6 +16,8 @@ ___________________
 3.	EVM-compatible smart contracts written in Solidity provides business logic and trust for the platform
 4.	Sign-up/in with email mechanism for easy onboarding, especially for non-Web3 users
 
+![Alt Text](https://gateway.ipfs.io/ipfs/bafkreigygl7zdexojy5nlb2fkarfhs2al73vq3d5egwtovtjf4gaqd7xm4)
+
 ## Smart contracts funcionalities
 
 The smart contracts used in Fund ECO provide the following:
